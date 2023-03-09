@@ -16,7 +16,7 @@ options.headless = True
 
 def scrape_url(url: str, driver=None):
     if driver is None:
-        driver = uc.Chrome(options=options, version_main=110)
+        driver = uc.Chrome(options=options)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
     driver.get(api_url)
@@ -49,7 +49,7 @@ def scrape_all(driver=None):
         return
 
     if driver is None:
-        driver = uc.Chrome(options=options, version_main=110)
+        driver = uc.Chrome(options=options)
 
     new_matches = []
     for i, url in enumerate(urls, start=1):
