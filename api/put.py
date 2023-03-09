@@ -13,12 +13,12 @@ logger = logging.getLogger("app")
 
 def add_url():
     if "url" not in request.form:
-        return "Missing tracker url", 401
+        return "Missing tracker url", 400
 
     # E.g., https://tracker.gg/valorant/match/770f73b1-95db-48ce-94f3-809d5cb5b00d
     url = urlparse(request.form["url"])
     if url.hostname != "tracker.gg":
-        return "Invalid tracker url", 401
+        return "Invalid tracker url", 400
 
     if not database_lock.acquire(block=False):
         return (
