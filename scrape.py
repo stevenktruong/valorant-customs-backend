@@ -8,14 +8,13 @@ import jsonlines
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 
-options = uc.ChromeOptions()
-options.add_argument("--ignore-certificate-errors")
-options.add_argument("--ignore-ssl-errors")
-options.headless = True
-
 
 def scrape_url(url: str, driver=None):
     if driver is None:
+        options = uc.ChromeOptions()
+        options.add_argument("--ignore-certificate-errors")
+        options.add_argument("--ignore-ssl-errors")
+        options.headless = True
         driver = uc.Chrome(options=options)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
@@ -49,6 +48,10 @@ def scrape_all(driver=None):
         return
 
     if driver is None:
+        options = uc.ChromeOptions()
+        options.add_argument("--ignore-certificate-errors")
+        options.add_argument("--ignore-ssl-errors")
+        options.headless = True
         driver = uc.Chrome(options=options)
 
     new_matches = []
