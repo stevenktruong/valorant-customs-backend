@@ -1,9 +1,7 @@
-import atexit
 import logging
-import time
 import os
-
 from apscheduler.schedulers.background import BackgroundScheduler
+
 from flask import Flask
 from flask_cors import CORS
 
@@ -17,20 +15,30 @@ gunicorn_logger = logging.getLogger("gunicorn.error")
 app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(gunicorn_logger.level)
 
-if not os.path.exists("out"):
-    os.mkdir("out")
 
+def refresh_datasets():
+    app.logger.info("Refreshing datasets")
+    with database_lock:
+        scrape_all()
+        process_scrape()
+        generate_datasets(output_dir="./out-min", minified=True)
+    app.logger.info("Done")
+
+
+# Make sure out-min is populated before starting the server and
+# refresh the dataset if tracker-urls.txt is newer than the dataset
 if not os.path.exists("out-min"):
     os.mkdir("out-min")
 
-# Make sure out-min is populated before starting the server
-app.logger.info("Initializing datasets")
-scrape_all()
-process_scrape()
-generate_datasets(output_dir="./out-min", minified=True)
-app.logger.info("Done. Starting Flask app")
+if not os.path.exists("out-min/dashboard.json") or (
+    os.path.getmtime("out-min/dashboard.json") < os.path.getmtime("tracker-urls.txt")
+):
+    refresh_datasets()
 
-# TODO: Cron job
+# Refresh datasets every midnight
+scheduler = BackgroundScheduler()
+scheduler.add_job(refresh_datasets, "cron", day="*", hour=0, minute=0, second=0)
+scheduler.start()
 
 app.add_url_rule(
     "/dashboard",
