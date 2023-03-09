@@ -3,4 +3,5 @@ __pycache__
 
 scrape.jsonl
 models
+out
 out-min
