@@ -33,14 +33,14 @@ app.logger.info("Done. Starting Flask app")
 # TODO: Cron job
 
 app.add_url_rule(
-    "/api/dashboard",
+    "/dashboard",
     view_func=get.dashboard,
     methods=["GET"],
 )
 app.add_url_rule(
-    "/api/wall-of-shame",
+    "/wall-of-shame",
     view_func=get.wall_of_shame,
     methods=["GET"],
 )
 
-app.add_url_rule("/api/add", view_func=put.add_url, methods=["PUT"])
+app.add_url_rule("/add", view_func=put.add_url, methods=["PUT"])
