@@ -16,7 +16,7 @@ options.headless = True
 
 def scrape_url(url: str, driver=None):
     if driver is None:
-        driver = uc.Chrome(options=options)
+        driver = uc.Chrome(options=options, version_main=110)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
     driver.get(api_url)
@@ -26,9 +26,7 @@ def scrape_url(url: str, driver=None):
     return match_json
 
 
-if __name__ == "__main__":
-    driver = uc.Chrome(options=options, version_main=110)
-
+def scrape_all(driver=None):
     # Starting from 10/11/22
     urls = []
     if os.path.exists("./tracker-urls.txt"):
@@ -46,6 +44,12 @@ if __name__ == "__main__":
     for match in matches:
         if match["tracker_url"] in urls:
             urls.remove(match["tracker_url"])
+
+    if len(urls) == 0:
+        return
+
+    if driver is None:
+        driver = uc.Chrome(options=options, version_main=110)
 
     new_matches = []
     for i, url in enumerate(urls, start=1):
@@ -77,3 +81,7 @@ if __name__ == "__main__":
     print("Done")
 
     driver.close()
+
+
+if __name__ == "__main__":
+    scrape_all()
