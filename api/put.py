@@ -56,7 +56,7 @@ def process_url(url: str):
 
         logger.info("Adding URL to tracker-urls.txt")
         with open("./tracker-urls.txt", mode="a") as f:
-            f.write(f"\n{url}")
+            f.write(f"{url}\n")
             f.close()
 
         logger.info("Processing scraped data")
