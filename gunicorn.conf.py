@@ -1,2 +1,3 @@
 preload_app = True
-workers = 4
+workers = 2
+loglevel = "debug"
