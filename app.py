@@ -20,8 +20,10 @@ def refresh_datasets():
     app.logger.info("Refreshing datasets")
     with database_lock:
         scrape_all()
-        process_scrape()
-        generate_datasets(output_dir="./out-min", minified=True)
+        matches_json = process_scrape()
+        generate_datasets(
+            matches_json=matches_json, output_dir="./out-min", minified=True
+        )
     app.logger.info("Done")
 
 

@@ -4,16 +4,12 @@ import sys
 
 from dataset_generators import *
 from Match import Match
+from process_scrape import process_scrape
 
 
-def generate_datasets(output_dir, minified=False):
-    matches: list[Match] = []
-    with open("./data.json", mode="r") as f:
-        data = json.load(f)
-        # data.json is sorted in process_scrape.py
-        # matches = sorted([Match(match_json) for match_json in data], key=lambda m: m.time)
-        matches = [Match(match_json) for match_json in data]
-        f.close()
+def generate_datasets(matches_json, output_dir, minified=False):
+    matches: list[Match] = [Match(match_json) for match_json in matches_json]
+    matches.sort(key=lambda m: m.time)
 
     dashboard_generators: list[DatasetGenerator] = [
         AssistsGivenPerStandardGameGenerator(),
@@ -72,41 +68,8 @@ def generate_datasets(output_dir, minified=False):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--minified":
-        generate_datasets(output_dir="./out-min", minified=True)
-        exit()
+    matches_json = process_scrape()
+    generate_datasets(
+            matches_json=matches_json, output_dir="./out-min", minified=True
+        )
 
-    output_dir = "./out"
-
-    matches: list[Match] = []
-    with open("./data.json", mode="r") as f:
-        data = json.load(f)
-        # data.json is sorted in process_scrape.py
-        # matches = sorted([Match(match_json) for match_json in data], key=lambda m: m.time)
-        matches = [Match(match_json) for match_json in data]
-        f.close()
-
-    generators: list[DatasetGenerator] = [
-        AssistsGivenPerStandardGameGenerator(),
-        AssistsReceivedPerStandardGameGenerator(),
-        EasiestMatchupsGenerator(),
-        IndividualGenerator(),
-        MapsGenerator(),
-        MetaGenerator(),
-        RunningWinrateOverTimeGenerator(),
-        TeammateSynergyGenerator(),
-        WallOfShameGenerator(),
-    ]
-
-    for match in matches:
-        for generator in generators:
-            generator.accumulate(match)
-
-    for generator in generators:
-        generator.finalize()
-        generator.generate(output_dir=output_dir)
-
-    with open(os.path.join(output_dir, "data-frame-friendly.json"), mode="w") as f:
-        out_json = {i: match_json for i, match_json in enumerate(data)}
-        json.dump(out_json, f)
-        f.close()

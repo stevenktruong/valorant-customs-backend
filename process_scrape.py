@@ -1,7 +1,4 @@
-import json
 import jsonlines
-
-from dateutil.parser import isoparse
 
 from constants import *
 
@@ -62,7 +59,7 @@ def puuid_to_name(puuid):
 
 
 def process_scrape():
-    matches = []
+    matches_json = []
     with jsonlines.open("./scrape.jsonl", mode="r") as f:
         for match_json in f:
             match = {
@@ -313,13 +310,15 @@ def process_scrape():
 
                 match["rounds"][i]["duration"] = round_end - round_start
 
-            matches.append(match)
+            matches_json.append(match)
         f.close()
 
-    with open("./data.json", mode="w") as f:
-        matches.sort(key=lambda m: isoparse(m["time"]))
-        json.dump(matches, f, indent=2)
-        f.close()
+    # with open("./data.json", mode="w") as f:
+    #     matches.sort(key=lambda m: isoparse(m["time"]))
+    #     json.dump(matches, f, indent=2)
+    #     f.close()
+
+    return matches_json
 
 
 if __name__ == "__main__":

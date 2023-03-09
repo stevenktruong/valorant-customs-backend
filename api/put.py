@@ -49,7 +49,7 @@ def process_url(url: str):
         logger.info("Begin scraping")
         match_json = scrape_url(url)
 
-        logger.info("Updating scrape.json")
+        logger.info("Updating scrape.jsonl")
         with jsonlines.open("./scrape.jsonl", mode="a") as f:
             f.write(match_json)
             f.close()
@@ -60,10 +60,12 @@ def process_url(url: str):
             f.close()
 
         logger.info("Processing scraped data")
-        process_scrape()
+        matches_json = process_scrape()
 
         logger.info("Updating out-min")
-        generate_datasets(output_dir="./out-min", minified=True)
+        generate_datasets(
+            matches_json=matches_json, output_dir="./out-min", minified=True
+        )
 
         logger.info("Successfully processed URL")
     except Exception as e:
