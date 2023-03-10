@@ -47,15 +47,15 @@ scheduler.start()
 
 app.add_url_rule(
     "/dashboard",
-    view_func=api.get.dashboard,
+    view_func=api.datasets.dashboard,
     methods=["GET"],
 )
 app.add_url_rule(
     "/wall-of-shame",
-    view_func=api.get.wall_of_shame,
+    view_func=api.datasets.wall_of_shame,
     methods=["GET"],
 )
 
 app.add_url_rule("/match/all", view_func=api.match.all_urls, methods=["GET"])
-app.add_url_rule("/match", view_func=api.match.add_url, methods=["PUT"])
+app.add_url_rule("/match", view_func=api.match.add_url, methods=["POST"])
 app.add_url_rule("/match", view_func=api.match.remove_url, methods=["DELETE"])
