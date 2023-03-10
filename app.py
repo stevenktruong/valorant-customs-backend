@@ -53,4 +53,5 @@ app.add_url_rule(
     methods=["GET"],
 )
 
-app.add_url_rule("/add", view_func=put.add_url, methods=["PUT"])
+app.add_url_rule("/add", view_func=put.add, methods=["PUT"])
+app.add_url_rule("/remove", view_func=put.remove, methods=["PUT"])

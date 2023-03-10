@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Callable
+from urllib.parse import urlparse
 
 from pytz import timezone
 
@@ -56,3 +57,16 @@ def is_player_of_interest(player_name):
 
 def filter_players(player_list):
     return list(filter(is_player_of_interest, player_list))
+
+
+def is_valid_tracker_url(tracker_url: str) -> bool:
+    url = urlparse(tracker_url)
+    if url.hostname != "tracker.gg":
+        return False
+
+    url_split_path = url.path.split("/")
+    return (
+        len(url_split_path) == 4
+        and url_split_path[1] == "valorant"
+        and url_split_path[2] == "match"
+    )
