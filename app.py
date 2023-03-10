@@ -5,7 +5,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_cors import CORS
 
-from api import *
+import api
+from locks import database_lock
+from generate_datasets import generate_datasets
+from process_scrape import process_scrape
 from scrape import scrape_all
 
 app = Flask(__name__)
@@ -44,14 +47,15 @@ scheduler.start()
 
 app.add_url_rule(
     "/dashboard",
-    view_func=get.dashboard,
+    view_func=api.get.dashboard,
     methods=["GET"],
 )
 app.add_url_rule(
     "/wall-of-shame",
-    view_func=get.wall_of_shame,
+    view_func=api.get.wall_of_shame,
     methods=["GET"],
 )
 
-app.add_url_rule("/add", view_func=put.add, methods=["PUT"])
-app.add_url_rule("/remove", view_func=put.remove, methods=["PUT"])
+app.add_url_rule("/match/all", view_func=api.match.all_urls, methods=["GET"])
+app.add_url_rule("/match", view_func=api.match.add_url, methods=["PUT"])
+app.add_url_rule("/match", view_func=api.match.remove_url, methods=["DELETE"])

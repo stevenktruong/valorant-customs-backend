@@ -14,7 +14,16 @@ from util import is_valid_tracker_url
 logger = logging.getLogger("app")
 
 
-def add():
+def all_urls():
+    urls = []
+    with open("./tracker-urls.txt", mode="r") as f:
+        urls = [line.rstrip() for line in f]
+        f.close()
+
+    return {"tracker_urls": urls}
+
+
+def add_url():
     if "url" not in request.form:
         return "Missing tracker URL", 400
 
@@ -39,13 +48,13 @@ def add():
         return "Match is already included on the dashboard", 200
 
     Thread(
-        target=add_url,
+        target=add_url_job,
         kwargs={"tracker_url": tracker_url},
     ).start()
     return "Add request received", 202
 
 
-def remove():
+def remove_url():
     if "url" not in request.form:
         return "Missing tracker URL to remove", 400
 
@@ -69,13 +78,13 @@ def remove():
         return "Match already wasn't included on the dashboard", 404
 
     Thread(
-        target=remove_url,
+        target=remove_url_job,
         kwargs={"tracker_url": tracker_url},
     ).start()
     return "Remove request received", 202
 
 
-def add_url(tracker_url: str):
+def add_url_job(tracker_url: str):
     try:
         logger.info(f"Processing {tracker_url}")
 
@@ -107,7 +116,7 @@ def add_url(tracker_url: str):
         database_lock.release()
 
 
-def remove_url(tracker_url: str):
+def remove_url_job(tracker_url: str):
     try:
         logger.info(f"Removing {tracker_url}")
 
