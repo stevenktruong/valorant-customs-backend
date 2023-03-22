@@ -10,7 +10,6 @@ PLAYER_NAMES = [
     DARWIN,
     JOSH,
     LINDSEY,
-    # SEQUENTIAL,
     SOPHIE,
     STEVE,
     STEVEN,

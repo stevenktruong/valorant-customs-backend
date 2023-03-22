@@ -4,6 +4,7 @@ from constants import *
 
 player_tags = {
     "Candysan": ANDY,
+    "ThrobbinWilliams": BRANDON,
     "BigBoiB": BRANDON,
     "Brioche": BREE,
     "brianwoohoo": BRIAN,
@@ -13,7 +14,6 @@ player_tags = {
     "Mirabel Madrigal": DARWIN,
     "bot001341": JOSH,
     "aylindsay": LINDSEY,
-    "Sequential": SEQUENTIAL,
     "chushberry": SOPHIE,
     "alomeirca": STEVE,
     "Selintt": STEVE,
@@ -37,7 +37,7 @@ player_ids = {
     "x4VQ1y3s1A4GOSoFjHnYrOuRKUW2nM5B7Lyy-L_1hPEFj-_Wde6ZYN4f2_4uz9t5Ga7XkWZpzZ4Tfw": DARWIN,
     "C_tY6a_w5RZM-Q4-o4lXmYWyHwR47CdIhc6RqdojrFvYP4__H6fTcEsl9NyeERHG5GhU77fjdPVvaQ": JOSH,
     "HdmC1fwo6fs0IR5aF8YPr_d8Y9O4mGvLEte-ZobPyIIGY_rgprMUsKVcU1bgNGrO64cY0mVe3wLyIA": LINDSEY,
-    "cc0hfNaF5_tny7jaSf8N7Bar87EQJt3fLsy85NKGFHBjixtmXfwYgZ9iaIqfaHSwyDvb6HbzOCCuCQ": SEQUENTIAL,
+    # "cc0hfNaF5_tny7jaSf8N7Bar87EQJt3fLsy85NKGFHBjixtmXfwYgZ9iaIqfaHSwyDvb6HbzOCCuCQ": SEQUENTIAL,
     "QUesI_kn1ehLlxurIHZtD9Ww-9qESBRQ_RodxkG7q_jWaVB5p7eh1VxnKUiuRmW_ABu8l2Elqr7MtQ": SOPHIE,
     "g5ab9-AFyFHyaAzvd2E3YDPxyd_o7XMBQ3oMJEKvVcoCdD5DSWijihWgt4lO3RdeQ6glRVQVQZowTQ": STEVE,
     "9AEt5kjyF3Ho7ZiXaaZA03mCw8_CCF4dP6J8QExrVssTB_5HDXaDhrsgwPzs_Y0o3QVxmN2iqoVpyA": STEVE,
