@@ -13,7 +13,7 @@ player_tags = {
     "ChzGorditaCrunch": DARWIN,
     "Jeff Probst": DARWIN,
     "Mirabel Madrigal": DARWIN,
-    "Elke": ELKE,
+    "Uzumaki 好き": ELKE,
     "bot001341": JOSH,
     "aylindsay": LINDSEY,
     "chushberry": SOPHIE,
