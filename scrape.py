@@ -15,7 +15,7 @@ def scrape_url(url: str, driver=None):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
         options.headless = True
-        driver = uc.Chrome(options=options, version_main=111)
+        driver = uc.Chrome(options=options, version_main=113)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
     driver.get(api_url)

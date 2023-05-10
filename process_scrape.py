@@ -4,6 +4,7 @@ from constants import *
 
 player_tags = {
     "Candysan": ANDY,
+    "JHardRTolkien": BRANDON,
     "ThrobbinWilliams": BRANDON,
     "BigBoiB": BRANDON,
     "Brioche": BREE,
