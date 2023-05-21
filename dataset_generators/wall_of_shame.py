@@ -19,6 +19,8 @@ SELF_DAMAGE = "self_damage"
 BOMB_DEATHS = "bomb_deaths"
 AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS = "average_time_alive_on_won_attack_rounds"
 AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS = "average_time_alive_on_lost_attack_rounds"
+LONGEST_LOSE_STREAK = "longest_lose_streak"
+LONGEST_WIN_STREAK = "longest_win_streak"
 
 
 class WallOfShameGenerator(DatasetGenerator):
@@ -41,15 +43,38 @@ class WallOfShameGenerator(DatasetGenerator):
                 BOMB_DEATHS: 0,
                 AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS: 0,
                 AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS: 0,
+                LONGEST_LOSE_STREAK: 0,
+                LONGEST_WIN_STREAK: 0,
             }
             for player_name in PLAYER_NAMES
         }
         self.won_attack_rounds = {player_name: 0 for player_name in PLAYER_NAMES}
         self.lost_attack_rounds = {player_name: 0 for player_name in PLAYER_NAMES}
+        self.current_lose_streak = {player_name: 0 for player_name in PLAYER_NAMES}
+        self.current_win_streak = {player_name: 0 for player_name in PLAYER_NAMES}
 
     def accumulate(self, match: Match):
         for player_name in filter_players(match.all_players):
             self.out_json[player_name][PLANTS] += match.all_players[player_name].plants
+
+            if match.player_did_win(player_name):
+                # Update the longest lose streak and reset the current one
+                self.out_json[player_name][LONGEST_LOSE_STREAK] = max(
+                    self.out_json[player_name][LONGEST_LOSE_STREAK],
+                    self.current_lose_streak[player_name],
+                )
+
+                self.current_lose_streak[player_name] = 0
+                self.current_win_streak[player_name] += 1
+            else:
+                # Update the longest win streak and reset the current one
+                self.out_json[player_name][LONGEST_WIN_STREAK] = max(
+                    self.out_json[player_name][LONGEST_WIN_STREAK],
+                    self.current_win_streak[player_name],
+                )
+
+                self.current_lose_streak[player_name] += 1
+                self.current_win_streak[player_name] = 0
 
         for _round in match.rounds:
             for damage_event in _round.damage_events:
@@ -160,6 +185,14 @@ class WallOfShameGenerator(DatasetGenerator):
             ] = round(
                 self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS]
                 / (self.lost_attack_rounds[player_name] * 1000)
+            )
+            self.out_json[player_name][LONGEST_LOSE_STREAK] = max(
+                self.out_json[player_name][LONGEST_LOSE_STREAK],
+                self.current_lose_streak[player_name],
+            )
+            self.out_json[player_name][LONGEST_WIN_STREAK] = max(
+                self.out_json[player_name][LONGEST_WIN_STREAK],
+                self.current_win_streak[player_name],
             )
 
             if minified:
