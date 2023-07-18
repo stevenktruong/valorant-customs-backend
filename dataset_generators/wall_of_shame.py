@@ -161,31 +161,46 @@ class WallOfShameGenerator(DatasetGenerator):
 
     def finalize(self, minified=False):
         for player_name in PLAYER_NAMES:
-            self.out_json[player_name][HEADSHOT_RATE] = round(
-                100
-                * self.out_json[player_name][HEADSHOTS]
-                / self.out_json[player_name][BULLETS]
-            )
-            self.out_json[player_name][BODYSHOT_RATE] = round(
-                100
-                * self.out_json[player_name][BODYSHOTS]
-                / self.out_json[player_name][BULLETS]
-            )
-            self.out_json[player_name][LEGSHOT_RATE] = round(
-                100
-                * self.out_json[player_name][LEGSHOTS]
-                / self.out_json[player_name][BULLETS]
-            )
-            self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS] = round(
+            if self.out_json[player_name][BULLETS] != 0:
+                self.out_json[player_name][HEADSHOT_RATE] = round(
+                    100
+                    * self.out_json[player_name][HEADSHOTS]
+                    / self.out_json[player_name][BULLETS]
+                )
+                self.out_json[player_name][BODYSHOT_RATE] = round(
+                    100
+                    * self.out_json[player_name][BODYSHOTS]
+                    / self.out_json[player_name][BULLETS]
+                )
+                self.out_json[player_name][LEGSHOT_RATE] = round(
+                    100
+                    * self.out_json[player_name][LEGSHOTS]
+                    / self.out_json[player_name][BULLETS]
+                )
+            else:
+                self.out_json[player_name][HEADSHOT_RATE] = 0
+                self.out_json[player_name][BODYSHOT_RATE] = 0
+                self.out_json[player_name][LEGSHOT_RATE] = 0
+
+            if self.won_attack_rounds[player_name] != 0:
+                self.out_json[player_name][
+                    AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS
+                ] = round(
+                    self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS]
+                    / (self.won_attack_rounds[player_name] * 1000)
+                )
+            else:
                 self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS]
-                / (self.won_attack_rounds[player_name] * 1000)
-            )
-            self.out_json[player_name][
-                AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS
-            ] = round(
-                self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS]
-                / (self.lost_attack_rounds[player_name] * 1000)
-            )
+
+            if self.lost_attack_rounds[player_name] != 0:
+                self.out_json[player_name][
+                    AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS
+                ] = round(
+                    self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS]
+                    / (self.lost_attack_rounds[player_name] * 1000)
+                )
+            else:
+                self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_LOST_ATTACK_ROUNDS] = 0
             self.out_json[player_name][LONGEST_LOSE_STREAK] = max(
                 self.out_json[player_name][LONGEST_LOSE_STREAK],
                 self.current_lose_streak[player_name],

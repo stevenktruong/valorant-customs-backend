@@ -91,8 +91,12 @@ class IndividualGenerator(DatasetGenerator):
             player_entry = self.out_json[player_name]
 
             for role_name in ROLE_NAMES:
-                if player_entry[ROLES][role_name][GAMES] / player_entry[GAMES] > 0.3:
-                    self.out_json[player_name][TOP_ROLES].append(role_name)
+                if player_entry[GAMES] != 0:
+                    if (
+                        player_entry[ROLES][role_name][GAMES] / player_entry[GAMES]
+                        > 0.3
+                    ):
+                        self.out_json[player_name][TOP_ROLES].append(role_name)
 
             agents_sorted_by_plays = sorted(
                 self.out_json[player_name][AGENTS],
