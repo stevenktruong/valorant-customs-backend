@@ -64,7 +64,7 @@ def scrape_all(driver=None):
         while retries > 0:
             retries -= 1
             try:
-                time.sleep(0.5 + uniform(-0.125, 0.125))
+                time.sleep(1 + uniform(-0.125, 0.125))
                 match_json = scrape_url(url, driver=driver)
                 new_matches.append(match_json)
 
