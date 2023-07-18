@@ -14,7 +14,7 @@ def scrape_url(url: str, driver=None):
         options = uc.ChromeOptions()
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
-        options.headless = True
+        options.add_argument("--headless")
         driver = uc.Chrome(options=options, version_main=114)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
@@ -51,7 +51,7 @@ def scrape_all(driver=None):
         options = uc.ChromeOptions()
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
-        options.headless = True
+        options.add_argument("--headless")
         driver = uc.Chrome(options=options)
 
     new_matches = []
@@ -64,7 +64,7 @@ def scrape_all(driver=None):
         while retries > 0:
             retries -= 1
             try:
-                time.sleep(1 + uniform(-0.125, 0.125))
+                time.sleep(1 + uniform(-0.25, 0.25))
                 match_json = scrape_url(url, driver=driver)
                 new_matches.append(match_json)
 
