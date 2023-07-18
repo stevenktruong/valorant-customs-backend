@@ -3,7 +3,6 @@ import jsonlines
 from constants import *
 
 player_tags = {
-    "Candysan": ANDY,
     "JHardRTolkien": BRANDON,
     "ThrobbinWilliams": BRANDON,
     "BigBoiB": BRANDON,
@@ -32,7 +31,6 @@ player_tags = {
 
 # Account identifiers from VALORANT; used for player locations
 player_ids = {
-    "KOim9KyXvSPhXO6eRFhe_sdVWQ-J6rdj8QAsfqudhJiYMNcNbfkkhlf5cBhLanULZ_J09lsQVYHebA": ANDY,
     "RujpEbc0IH314j9VAhPjv0pEBI3OU1q5jPlWMRruJGpkeIrt6rk1ZjyklEnNCzaIIhNfxybDmTPS6g": BRANDON,
     "zVBj-5l3XxSjxwtH-NLvgj-KCcjCNnU8ePJzG1XMn7GbX9D_Z8qUh8wjITvhm69_X0Oa--XluO_vYQ": BREE,
     "RReD4zGGEQBPZ01t7etkv8VDpaca8kmLMqR9X4t2htNfxLciKXzQUNKc4FBlA5h2a35_65kT6DdIRA": BRIAN,

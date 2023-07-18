@@ -47,7 +47,7 @@ def generate_datasets(matches_json, output_dir, minified=False):
     wall_of_shame_generator.finalize()
     wall_of_shame_generator.generate(output_dir=output_dir, minified=minified)
 
-    # Data for training one of Andy's balancing algorithms
+    # Data for training one of the balancing algorithms
     teammate_synergy_data_generator.finalize()
     teammate_synergy_data_generator.generate(output_dir=output_dir, minified=minified)
 

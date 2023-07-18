@@ -1,5 +1,4 @@
 # Player names used as keys in output JSON
-ANDY = "andy"
 BRANDON = "brandon"
 BREE = "bree"
 BRIAN = "brian"

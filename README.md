@@ -1,9 +1,5 @@
 # Valorant Customs Stats
 
-Dashboard statistics tracking of DARWIN Discord customs games. Using Power BI and VBA to automate data cleaning and visualization.
-
-![Dashboard](https://github.com/candysan7/valorant-customs-stats/blob/main/images/dashboard-versions/version1.2.png)
-
 ## Dashboards
 
 -   [Website](https://valorant-customs-graphs.vercel.app/)
@@ -37,26 +33,9 @@ All data is derived from [tracker.gg](https://tracker.gg/valorant) until Riot re
 2. Run `process_scrape.py` to transform the data into something the main Python script can handle. See `data.json` for the output and `Match.py` for its representation in the main script.
 3. Run `make_datasets.py` to generate all the smaller datasets used by the front-end.
 
-### Architecture & Design
-
-![Architecture](https://github.com/candysan7/valorant-customs-stats/blob/main/images/documentation/architecture4.png)
-
-### Future
-
--   Build discord bot or command to return dashboard link
--   Calculation: Biggest rat, most ratted, best duo role synergy, most games played together
--   Design: clip gallery, dashboard re-design
--   Front-end implementation: home page, wall of shame updates (biggest bait, master baiter, bomb bitches, turtles, biggest rat, most ratted), autobalance
-
-### Why Power BI over Tableau?
-
--   Tableau was not able to display string and integer values on the same table
--   Power BI also allows for **free** desktop version
-
 ### Credits
 
-| Contributor       | Role                  |
-| :---------------- | :-------------------- |
-| **Steven Truong** | Back-end Developer    |
-| **Andy Xiang**    | Unknown Subordinate 1 |
-| **Lindsey Wong**  | Unknown Subordinate 2 |
+| Contributor       | Role                |
+| :---------------- | :------------------ |
+| **Steven Truong** | Developer           |
+| **Lindsey Wong**  | Unknown Subordinate |
