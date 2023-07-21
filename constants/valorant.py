@@ -15,6 +15,7 @@ BREACH = "Breach"
 BRIMSTONE = "Brimstone"
 CHAMBER = "Chamber"
 CYPHER = "Cypher"
+DEADLOCK = "Deadlock"
 FADE = "Fade"
 GEKKO = "Gekko"
 HARBOR = "Harbor"
@@ -55,6 +56,7 @@ AGENT_NAMES = [
     BRIMSTONE,
     CHAMBER,
     CYPHER,
+    DEADLOCK,
     FADE,
     GEKKO,
     HARBOR,
@@ -81,6 +83,7 @@ AGENT_NAME_TO_ROLE = {
     BRIMSTONE: CONTROLLER,
     CHAMBER: SENTINEL,
     CYPHER: SENTINEL,
+    DEADLOCK: SENTINEL,
     FADE: INITIATOR,
     GEKKO: INITIATOR,
     HARBOR: CONTROLLER,
