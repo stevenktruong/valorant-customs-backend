@@ -15,6 +15,7 @@ def scrape_url(url: str, driver=None):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
         options.add_argument("--headless")
+        options.add_argument("--proxy-server=http://p.webshare.io:9999")
         driver = uc.Chrome(options=options, version_main=114)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
@@ -52,7 +53,8 @@ def scrape_all(driver=None):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
         options.add_argument("--headless")
-        driver = uc.Chrome(options=options)
+        options.add_argument("--proxy-server=http://p.webshare.io:9999")
+        driver = uc.Chrome(options=options, version_main=114)
 
     new_matches = []
     for i, url in enumerate(urls, start=1):
