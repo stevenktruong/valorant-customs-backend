@@ -1,5 +1,6 @@
 import json
 import os.path
+import sys
 import time
 from random import uniform
 from urllib.parse import urlparse
@@ -9,13 +10,14 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 
 
-def scrape_url(url: str, driver=None):
+def scrape_url(url: str, driver=None, use_proxy=True):
     if driver is None:
         options = uc.ChromeOptions()
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
         options.add_argument("--headless")
-        options.add_argument("--proxy-server=http://p.webshare.io:9999")
+        if use_proxy:
+            options.add_argument("--proxy-server=http://p.webshare.io:9999")
         driver = uc.Chrome(options=options, version_main=114)
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
@@ -26,7 +28,7 @@ def scrape_url(url: str, driver=None):
     return match_json
 
 
-def scrape_all(driver=None):
+def scrape_all(driver=None, use_proxy=True):
     # Starting from 10/11/22
     urls = []
     if os.path.exists("./tracker-urls.txt"):
@@ -53,7 +55,8 @@ def scrape_all(driver=None):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--ignore-ssl-errors")
         options.add_argument("--headless")
-        options.add_argument("--proxy-server=http://p.webshare.io:9999")
+        if use_proxy:
+            options.add_argument("--proxy-server=http://p.webshare.io:9999")
         driver = uc.Chrome(options=options, version_main=114)
 
     new_matches = []
@@ -62,11 +65,11 @@ def scrape_all(driver=None):
             f"[{'0' if i <= 9 and len(urls) >= 10 else ''}{i}/{len(urls)}]: Scraping {url}... ",
             end="",
         )
-        retries = 5
+        retries = 3
         while retries > 0:
             retries -= 1
             try:
-                time.sleep(1 + uniform(-0.25, 0.25))
+                time.sleep(2 + uniform(-0.25, 0.25))
                 match_json = scrape_url(url, driver=driver)
                 new_matches.append(match_json)
 
@@ -89,4 +92,8 @@ def scrape_all(driver=None):
 
 
 if __name__ == "__main__":
-    scrape_all()
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+        scrape_url(url, use_proxy=False)
+    else:
+        scrape_all(use_proxy=False)
