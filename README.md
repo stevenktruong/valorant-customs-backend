@@ -1,39 +1,54 @@
 # Valorant Customs Stats
 
-## Dashboards
-
--   [Website](https://valorant-customs-graphs.vercel.app/)
--   [Power BI](https://app.powerbi.com/view?r=eyJrIjoiNGUzNzMyOTctNTg2OC00YTEyLThmNjktOTJiOTE3ZGM0NjI3IiwidCI6IjlkZGFhY2ExLTM4OWYtNGNiMS1hMTEzLTA4MWJlNmNjMjVmYyIsImMiOjZ9)
+[Dashboard](https://www.valoquestionmark.com/)
 
 ## Documentation
 
+### Usage
+
+You can start the backend with `gunicorn app:app`. In addition to the API, the backend does the following:
+
+-   On startup, if `tracker-urls.txt` is newer than `out-min/dashboard.json`, the server will automatically update all the datasets.
+-   Every midnight PST, the datasets are refreshed (after enough time, older matches will be excluded from some stats).
+
+### API Endpoints
+
+Each API endpoint is registered via `add_url_rule` in `app.py`.
+
+| Method    | Endpoint        | Parameters | Description                                                                               |
+| :-------- | :-------------- | :--------- | :---------------------------------------------------------------------------------------- |
+| `GET`     | `dashboard`     |            | Returns data used to make graphs on the dashboard.                                        |
+| `GET`     | `wall-of-shame` |            | Returns data used to make the Wall of Shame leaderboards.                                 |
+| `POST`    | `match`         | `url`      | Attempt to add the match corresponding to the tracker.gg URL `url` to the dashboard.      |
+| `DELETE ` | `match`         | `url`      | Attempt to remove the match corresponding to the tracker.gg URL `url` from the dashboard. |
+| `GET`     | `match/all`     |            | Returns a list of all the tracker.gg URLs tracked by the dashboard.                       |
+
 ### Datasets
 
-| Dataset                                   | Description                                                                   |
-| :---------------------------------------- | :---------------------------------------------------------------------------- |
-| `assists-given-per-standard-game.json`    | Average assists given per 25-round game                                       |
-| `assists-received-per-standard-game.json` | Average assists received per 25-round game                                    |
-| `cumulative-winrate-over-time.json`       | Cumulative win rate calculated every 2 weeks                                  |
-| `data-frame-friendly.json`                | Format more easily converted to a data frame for autobalancing                |
-| `easiest-matchups.json`                   | Win rate when a certain player is on the opposing team                        |
-| `individual.json`                         | Individual stats, e.g., per match, per agent, etc.                            |
-| `maps.json`                               | Overall play count on each map                                                |
-| `meta.json`                               | Extra data for the front-end                                                  |
-| `portion-of-stats.json`                   | E.g., portion of kills from the player out of all kills in all of their games |
-| `roles.json`                              | Overall role count                                                            |
-| `running-winrate-over-time.json`          | Win rate in the past 60 days calculated every 2 weeks                         |
-| `teammate-synergy.json`                   | Win rate when a certain player is on the same team                            |
-| `winrate-over-time.json`                  | Win rate over each 2 week block                                               |
+Each dataset corresponds to a `DatasetGenerator` implementation in `dataset_generators`. Each `DatasetGenerator` needs to implement three methods:
 
-### Dataset Generation
+| Method                   | Description                                                                                                                         |
+| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `__init__` (constructor) | The argument passed into the superclass constructor is the name of the dataset, e.g., it's used as a key in `dashboard.json`.       |
+| `accumulate`             | Processes the next match and updates `out_json` accordingly.                                                                        |
+| `finalize`               | Performs any other computations needed to make the dataset, e.g., compute the win rate from the games counted through `accumulate`. |
 
-All data is derived from [tracker.gg](https://tracker.gg/valorant) until Riot releases the API for personal use. All datasets used for dashboards can be found in the `out` directory. To generate them yourself:
+Once a `DatasetGenerator` is implemented, it needs to be included somewhere in `generate_datasets.py`.
 
-1. Run `scrape.py` to scrape the raw data. It will be saved to a huge minified file (~70 MB) called `scrape.json`. For an example of what each match looks like in a readable format, see `tracker-sample.json`.
-2. Run `process_scrape.py` to transform the data into something the main Python script can handle. See `data.json` for the output and `Match.py` for its representation in the main script.
-3. Run `make_datasets.py` to generate all the smaller datasets used by the front-end.
+All data is derived from [tracker.gg](https://tracker.gg/valorant) until Riot releases the API for personal use. All datasets used for dashboards can be found in the `out-min` directory. To generate them manually:
 
-### Credits
+1. Run `scrape.py` to scrape the raw data. It will be saved to a huge minified file (~70 MB) called `scrape.jsonl` (instead of pure JSON, each line is a JSON object corresponding to a match). For an example of what each match looks like in a readable format, see `tracker-sample.json`.
+2. Run `generate_datasets.py` to generate all the smaller datasets used by the front-end. They will appear in `out-min`.
+
+### Onboarding Players
+
+New players should be registered in `config.py` (along with a constant in `constants/players.py`). In addition to changes in this codebase, we also need to register them in the frontend (profile picture, colors, current tag, etc.).
+
+### Miscellaneous
+
+In the event that the server is detected as a scraper by tracker.gg, a proxy can be configured in `config.py`.
+
+## Credits
 
 | Contributor       | Role                |
 | :---------------- | :------------------ |

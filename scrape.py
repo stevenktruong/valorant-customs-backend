@@ -9,16 +9,22 @@ import jsonlines
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 
+from config import PROXY
 
-def scrape_url(url: str, driver=None, use_proxy=True):
+
+def new_driver():
+    options = uc.ChromeOptions()
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--ignore-ssl-errors")
+    options.add_argument("--headless")
+    if PROXY:
+        options.add_argument(f"--proxy-server={PROXY}")
+    return uc.Chrome(options=options, version_main=114)
+
+
+def scrape_url(url: str, driver=None):
     if driver is None:
-        options = uc.ChromeOptions()
-        options.add_argument("--ignore-certificate-errors")
-        options.add_argument("--ignore-ssl-errors")
-        options.add_argument("--headless")
-        if use_proxy:
-            options.add_argument("--proxy-server=http://p.webshare.io:9999")
-        driver = uc.Chrome(options=options, version_main=114)
+        driver = new_driver()
 
     api_url = f"https://api.tracker.gg/api/v2/valorant/standard/matches/{urlparse(url).path.split('/')[-1]}"
     driver.get(api_url)
@@ -28,7 +34,7 @@ def scrape_url(url: str, driver=None, use_proxy=True):
     return match_json
 
 
-def scrape_all(driver=None, use_proxy=True):
+def scrape_all(driver=None):
     # Starting from 10/11/22
     urls = []
     if os.path.exists("./tracker-urls.txt"):
@@ -51,13 +57,7 @@ def scrape_all(driver=None, use_proxy=True):
         return
 
     if driver is None:
-        options = uc.ChromeOptions()
-        options.add_argument("--ignore-certificate-errors")
-        options.add_argument("--ignore-ssl-errors")
-        options.add_argument("--headless")
-        if use_proxy:
-            options.add_argument("--proxy-server=http://p.webshare.io:9999")
-        driver = uc.Chrome(options=options, version_main=114)
+        driver = new_driver()
 
     new_matches = []
     for i, url in enumerate(urls, start=1):
@@ -94,6 +94,6 @@ def scrape_all(driver=None, use_proxy=True):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         url = sys.argv[1]
-        scrape_url(url, use_proxy=False)
+        print(scrape_url(url))
     else:
-        scrape_all(use_proxy=False)
+        scrape_all()

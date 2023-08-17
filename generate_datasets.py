@@ -1,6 +1,5 @@
 import json
 import os.path
-import sys
 
 from dataset_generators import *
 from Match import Match
@@ -69,7 +68,4 @@ def generate_datasets(matches_json, output_dir, minified=False):
 
 if __name__ == "__main__":
     matches_json = process_scrape()
-    generate_datasets(
-            matches_json=matches_json, output_dir="./out-min", minified=True
-        )
-
+    generate_datasets(matches_json=matches_json, output_dir="./out-min", minified=True)

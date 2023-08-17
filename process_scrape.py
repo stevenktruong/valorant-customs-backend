@@ -1,33 +1,7 @@
 import jsonlines
 
 from constants import *
-
-player_tags = {
-    "JHardRTolkien": BRANDON,
-    "ThrobbinWilliams": BRANDON,
-    "BigBoiB": BRANDON,
-    "Brioche": BREE,
-    "brianwoohoo": BRIAN,
-    "RhythmKing": CADE,
-    "ChzGorditaCrunch": DARWIN,
-    "Jeff Probst": DARWIN,
-    "Mirabel Madrigal": DARWIN,
-    "Uzumaki 好き": ELKE,
-    "bot001341": JOSH,
-    "aylindsay": LINDSEY,
-    "chushberry": SOPHIE,
-    "alomeirca": STEVE,
-    "Selintt": STEVE,
-    "spookslayer1": STEVE,
-    "youngsmasher": STEVEN,
-    "sun": SUN,
-    "sun emoji": SUN,
-    "Susi sushiserver": SUSI,
-    "SusTwins": SUSI,
-    "danielscutiegf": SUSU,
-    "tangy": TANG,
-    "Tyblerone": YANG,
-}
+from config import TAG_TO_PLAYER_NAME
 
 # Account identifiers from VALORANT; used for player locations
 # Deprecated: tracker.gg uses the `platformUserIdentifier` with the player tag now
@@ -56,7 +30,7 @@ player_tags = {
 
 
 def username_to_name(username):
-    return player_tags.get(username, username)
+    return TAG_TO_PLAYER_NAME.get(username, username)
 
 
 def process_scrape():
