@@ -49,6 +49,7 @@ ICEBOX = "Icebox"
 LOTUS = "Lotus"
 PEARL = "Pearl"
 SPLIT = "Split"
+SUNSET = "Sunset"
 
 AGENT_NAMES = [
     ASTRA,
@@ -113,4 +114,5 @@ MAP_NAMES = [
     LOTUS,
     PEARL,
     SPLIT,
+    SUNSET,
 ]
