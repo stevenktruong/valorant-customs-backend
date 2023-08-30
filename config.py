@@ -27,6 +27,7 @@ TAG_TO_PLAYER_NAME = {
     "Brioche": BREE,
     "brianwoohoo": BRIAN,
     "RhythmKing": CADE,
+    "Experiment 421": CADE,
     "ChzGorditaCrunch": DARWIN,
     "Jeff Probst": DARWIN,
     "Mirabel Madrigal": DARWIN,
