@@ -34,6 +34,7 @@ TAG_TO_PLAYER_NAME = {
     "Uzumaki 好き": ELKE,
     "bot001341": JOSH,
     "aylindsay": LINDSEY,
+    "honey butter": LINDSEY,
     "chushberry": SOPHIE,
     "alomeirca": STEVE,
     "Selintt": STEVE,
