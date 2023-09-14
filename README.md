@@ -9,7 +9,7 @@
 Before you can run anything, you need to install all dependencies. It's recommended to do this in a virtual environment:
 
 ```
-python -m venv env
+python3.10 -m venv env
 source env/bin/activate
 python -m pip install -r requirements.txt
 ```
