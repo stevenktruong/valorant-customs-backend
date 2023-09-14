@@ -7,7 +7,7 @@ from flask import request
 import jsonlines
 from locks import database_lock
 from generate_datasets import generate_datasets
-from process_scrape import process_scrape
+from parse_scrape import parse_scrape
 from scrape import scrape_url
 from util import is_valid_tracker_url
 
@@ -102,12 +102,10 @@ def add_url_job(tracker_url: str):
             f.close()
 
         logger.info("Processing updated scraped data")
-        matches_json = process_scrape()
+        matches = parse_scrape()
 
         logger.info("Updating out-min")
-        generate_datasets(
-            matches_json=matches_json, output_dir="./out-min", minified=True
-        )
+        generate_datasets(matches=matches, output_dir="./out-min", minified=True)
 
         logger.info("Successfully added URL")
     except Exception as e:
@@ -144,12 +142,10 @@ def remove_url_job(tracker_url: str):
         os.remove("./scrape.jsonl.old")
 
         logger.info("Processing updated scraped data")
-        matches_json = process_scrape()
+        matches = parse_scrape()
 
         logger.info("Updating out-min")
-        generate_datasets(
-            matches_json=matches_json, output_dir="./out-min", minified=True
-        )
+        generate_datasets(matches=matches, output_dir="./out-min", minified=True)
 
         logger.info("Successfully removed URL")
     except Exception as e:

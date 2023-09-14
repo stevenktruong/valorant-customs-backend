@@ -8,7 +8,7 @@ from flask_cors import CORS
 import api
 from locks import database_lock
 from generate_datasets import generate_datasets
-from process_scrape import process_scrape
+from parse_scrape import parse_scrape
 from scrape import scrape_all
 
 app = Flask(__name__)
@@ -23,10 +23,8 @@ def refresh_datasets():
     app.logger.info("Refreshing datasets")
     with database_lock:
         scrape_all()
-        matches_json = process_scrape()
-        generate_datasets(
-            matches_json=matches_json, output_dir="./out-min", minified=True
-        )
+        matches = parse_scrape()
+        generate_datasets(matches=matches, output_dir="./out-min", minified=True)
     app.logger.info("Done")
 
 

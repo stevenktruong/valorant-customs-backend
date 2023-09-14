@@ -1,4 +1,5 @@
 import jsonlines
+from Match import Match
 
 from constants import *
 from config import TAG_TO_PLAYER_NAME
@@ -33,7 +34,7 @@ def username_to_name(username):
     return TAG_TO_PLAYER_NAME.get(username, username)
 
 
-def process_scrape():
+def parse_scrape() -> list[Match]:
     matches_json = []
     with jsonlines.open("./scrape.jsonl", mode="r") as f:
         for match_json in f:
@@ -295,8 +296,8 @@ def process_scrape():
     #     json.dump(matches, f, indent=2)
     #     f.close()
 
-    return matches_json
+    return [Match(match_json) for match_json in matches_json]
 
 
 if __name__ == "__main__":
-    process_scrape()
+    parse_scrape()

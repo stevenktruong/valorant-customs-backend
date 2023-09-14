@@ -3,11 +3,10 @@ import os.path
 
 from dataset_generators import *
 from Match import Match
-from process_scrape import process_scrape
+from parse_scrape import parse_scrape
 
 
-def generate_datasets(matches_json, output_dir, minified=False):
-    matches: list[Match] = [Match(match_json) for match_json in matches_json]
+def generate_datasets(matches: list[Match], output_dir, minified=False):
     matches.sort(key=lambda m: m.time)
 
     dashboard_generators: list[DatasetGenerator] = [
@@ -67,5 +66,5 @@ def generate_datasets(matches_json, output_dir, minified=False):
 
 
 if __name__ == "__main__":
-    matches_json = process_scrape()
-    generate_datasets(matches_json=matches_json, output_dir="./out-min", minified=True)
+    matches = parse_scrape()
+    generate_datasets(matches=matches, output_dir="./out-min", minified=True)

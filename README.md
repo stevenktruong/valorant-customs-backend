@@ -4,6 +4,24 @@
 
 ## Documentation
 
+### Setup
+
+Before you can run anything, you need to install all dependencies. It's recommended to do this in a virtual environment:
+
+```
+python -m venv env
+source env/bin/activate
+python -m pip install -r requirements.txt
+```
+
+After you run this once, next time you only need to run
+
+```
+source env/bin/activate
+```
+
+before you can use the available scripts.
+
 ### Usage
 
 You can start the backend with `gunicorn app:app`. In addition to the API, the backend does the following:
@@ -23,9 +41,15 @@ Each API endpoint is registered via `add_url_rule` in `app.py`.
 | `DELETE ` | `match`         | `url`      | Attempt to remove the match corresponding to the tracker.gg URL `url` from the dashboard. |
 | `GET`     | `match/all`     |            | Returns a list of all the tracker.gg URLs tracked by the dashboard.                       |
 
-### Datasets
+### Data
 
-Each dataset corresponds to a `DatasetGenerator` implementation in `dataset_generators`. Each `DatasetGenerator` needs to implement three methods:
+All data is derived from [tracker.gg](https://tracker.gg/valorant) until Riot releases the API for personal use. To scrape the data locally, run `scrape.py`. It will be saved to a huge minified file (~70 MB) called `scrape.jsonl` (instead of pure JSON, each line is a JSON object corresponding to a match). For an example of what each line looks like in a readable format, see `tracker-sample.json`.
+
+Each line is mapped to a `Match` object, which has a developer-friendly API. To see an example of how to use it, see `example.ipynb`.
+
+#### Datasets
+
+From the main scraped data, we generate smaller datasets with derived statistics that we're interested in. Each of these datasets corresponds to a `DatasetGenerator` implementation in `dataset_generators`. Each `DatasetGenerator` needs to implement three methods:
 
 | Method                   | Description                                                                                                                         |
 | :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
@@ -35,10 +59,7 @@ Each dataset corresponds to a `DatasetGenerator` implementation in `dataset_gene
 
 Once a `DatasetGenerator` is implemented, it needs to be included somewhere in `generate_datasets.py`.
 
-All data is derived from [tracker.gg](https://tracker.gg/valorant) until Riot releases the API for personal use. All datasets used for dashboards can be found in the `out-min` directory. To generate them manually:
-
-1. Run `scrape.py` to scrape the raw data. It will be saved to a huge minified file (~70 MB) called `scrape.jsonl` (instead of pure JSON, each line is a JSON object corresponding to a match). For an example of what each match looks like in a readable format, see `tracker-sample.json`.
-2. Run `generate_datasets.py` to generate all the smaller datasets used by the front-end. They will appear in `out-min`.
+All datasets used for dashboards can be found in the `out-min` directory. To generate them manually, run `generate_datasets.py` to generate all the smaller datasets used by the front-end. They will appear in `out-min`.
 
 ### Onboarding Players
 
