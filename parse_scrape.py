@@ -1,8 +1,8 @@
 import jsonlines
-from Match import Match
 
-from constants import *
 from config import TAG_TO_PLAYER_NAME
+from constants import *
+from Match import Match
 
 # Account identifiers from VALORANT; used for player locations
 # Deprecated: tracker.gg uses the `platformUserIdentifier` with the player tag now

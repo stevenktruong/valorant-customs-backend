@@ -3,10 +3,12 @@ import os
 import shutil
 from threading import Thread
 from urllib.parse import urlparse
-from flask import request
+
 import jsonlines
-from locks import database_lock
+from flask import request
+
 from generate_datasets import generate_datasets
+from locks import database_lock
 from parse_scrape import parse_scrape
 from scrape import scrape_url
 from util import is_valid_tracker_url
