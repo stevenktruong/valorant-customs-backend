@@ -1,13 +1,13 @@
 import logging
 import os
-from apscheduler.schedulers.background import BackgroundScheduler
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_cors import CORS
 
 import api
-from locks import database_lock
 from generate_datasets import generate_datasets
+from locks import database_lock
 from parse_scrape import parse_scrape
 from scrape import scrape_all
 
@@ -29,12 +29,18 @@ def refresh_datasets():
 
 
 # Make sure out-min is populated before starting the server and
-# refresh the dataset if tracker-urls.txt is newer than the dataset
+# refresh the dataset if tracker-urls.txt or config.py is newer than the
+# last refreshed dataset.
 if not os.path.exists("out-min"):
     os.mkdir("out-min")
 
-if not os.path.exists("out-min/dashboard.json") or (
-    os.path.getmtime("out-min/dashboard.json") < os.path.getmtime("tracker-urls.txt")
+if (
+    not os.path.exists("out-min/dashboard.json")
+    or (
+        os.path.getmtime("out-min/dashboard.json")
+        < os.path.getmtime("tracker-urls.txt")
+    )
+    or os.path.getmtime("config.py") < os.path.getmtime("tracker-urls.txt")
 ):
     refresh_datasets()
 
