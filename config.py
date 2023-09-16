@@ -37,6 +37,7 @@ TAG_TO_PLAYER_NAME = {
     "honey butter": LINDSEY,
     "chushberry": SOPHIE,
     "alomeirca": STEVE,
+    "mox": STEVE,
     "Selintt": STEVE,
     "spookslayer1": STEVE,
     "youngsmasher": STEVEN,
