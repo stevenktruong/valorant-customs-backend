@@ -82,7 +82,7 @@ def scrape_all(driver=None):
                 print(e)
                 continue
 
-    print("Saving...")
+    print("Saving... ", end="")
     with jsonlines.open("./scrape.jsonl", mode="a") as f:
         f.write_all(new_matches)
         f.close()
