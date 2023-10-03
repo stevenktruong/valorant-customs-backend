@@ -8,6 +8,8 @@ PLAYER_NAMES = [
     CADE,
     DARWIN,
     ELKE,
+    IRAM,
+    JASON,
     JOSH,
     LINDSEY,
     SOPHIE,
