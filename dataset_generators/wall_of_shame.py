@@ -190,7 +190,10 @@ class WallOfShameGenerator(DatasetGenerator):
                     / (self.won_attack_rounds[player_name] * 1000)
                 )
             else:
-                self.out_json[player_name][AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS]
+                # TODO: Check if this is the best thing to do
+                self.out_json[player_name][
+                    AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS
+                ] = 9999
 
             if self.lost_attack_rounds[player_name] != 0:
                 self.out_json[player_name][
