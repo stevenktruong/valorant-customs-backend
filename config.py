@@ -34,6 +34,7 @@ TAG_TO_PLAYER_NAME = {
     "Jeff Probst": DARWIN,
     "Mirabel Madrigal": DARWIN,
     "Uzumaki 好き": ELKE,
+    "NineTailed Fux": ELKE,
     "march 7 inches": IRAM,
     "kingofwallstreet": JASON,
     "wayson": JASON,

@@ -19,6 +19,7 @@ DEADLOCK = "Deadlock"
 FADE = "Fade"
 GEKKO = "Gekko"
 HARBOR = "Harbor"
+ISO = "Iso"
 JETT = "Jett"
 KAYO = "KAY/O"
 KILLJOY = "Killjoy"
@@ -61,6 +62,7 @@ AGENT_NAMES = [
     FADE,
     GEKKO,
     HARBOR,
+    ISO,
     JETT,
     KAYO,
     KILLJOY,
@@ -88,6 +90,7 @@ AGENT_NAME_TO_ROLE = {
     FADE: INITIATOR,
     GEKKO: INITIATOR,
     HARBOR: CONTROLLER,
+    ISO: DUELIST,
     JETT: DUELIST,
     KAYO: INITIATOR,
     KILLJOY: SENTINEL,
