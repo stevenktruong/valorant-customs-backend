@@ -50,6 +50,10 @@ class RunningWinrateOverTimeGenerator(DatasetGenerator):
             self.curr_block_start_date += self.time_increment
             self.curr_block_end_date += self.time_increment
 
+            if self.curr_block_end_date > self.last_date:
+                self.curr_block_start_date = self.last_date - self.block_length
+                self.curr_block_end_date = self.last_date
+
             prev_block = self.out_json[-1]
             next_block = {
                 BLOCK_END_TIME: self.curr_block_end_date.isoformat(),
@@ -85,33 +89,6 @@ class RunningWinrateOverTimeGenerator(DatasetGenerator):
         self.curr_block.append(match)
 
     def finalize(self, minified=False):
-        if datetime.fromisoformat(self.out_json[-1][BLOCK_END_TIME]) > self.last_date:
-            self.out_json.pop()
-
-        # The last block corresponds to today
-        prev_block = self.out_json[-1]
-        next_block = {
-            BLOCK_END_TIME: self.last_date.isoformat(),
-            DATA: {
-                player_name: {
-                    WINRATE: None,
-                    WINS: prev_block[DATA][player_name][WINS],
-                    GAMES: prev_block[DATA][player_name][GAMES],
-                }
-                for player_name in PLAYER_NAMES
-            },
-        }
-
-        last_start_date = self.last_date - self.block_length
-        while len(self.curr_block) > 0 and self.curr_block[0].time <= last_start_date:
-            removed_match = self.curr_block.pop(0)
-            for winner_name in filter_players(removed_match.winning_players):
-                next_block[DATA][winner_name][WINS] -= 1
-            for player_name in filter_players(removed_match.all_players):
-                next_block[DATA][player_name][GAMES] -= 1
-
-        self.out_json.append(next_block)
-
         for block_data in self.out_json:
             for _, player_stats in block_data[DATA].items():
                 if player_stats[GAMES] != 0:
