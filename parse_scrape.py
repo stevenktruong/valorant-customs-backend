@@ -70,6 +70,76 @@ def parse_scrape() -> list[Match]:
                         match["rounds"][round_index]["win_method"] = segment["stats"][
                             "roundResult"
                         ]["value"].lower()
+                        match["rounds"][round_index]["plant"] = (
+                            {
+                                "planter_name": username_to_name(
+                                    segment["metadata"]["plant"][
+                                        "platformUserIdentifier"
+                                    ].split("#")[0]
+                                ),
+                                "location": {
+                                    "x": segment["metadata"]["plant"]["location"]["x"],
+                                    "y": segment["metadata"]["plant"]["location"]["y"],
+                                },
+                                "site": segment["metadata"]["plant"]["site"],
+                                "round_time": segment["metadata"]["plant"]["roundTime"],
+                                "player_locations": [
+                                    {
+                                        "player_name": username_to_name(
+                                            d["platformUserIdentifier"].split("#")[0]
+                                        ),
+                                        "angle": d["viewRadians"],
+                                        "location": {
+                                            "x": d["location"]["x"],
+                                            "y": d["location"]["y"],
+                                        },
+                                    }
+                                    for d in segment["metadata"]["plant"][
+                                        "playerLocations"
+                                    ]
+                                ],
+                            }
+                            if segment["metadata"]["plant"]
+                            else None
+                        )
+
+                        match["rounds"][round_index]["defuse"] = (
+                            {
+                                "defuser_name": username_to_name(
+                                    segment["metadata"]["defuse"][
+                                        "platformUserIdentifier"
+                                    ].split("#")[0]
+                                ),
+                                "location": {
+                                    "x": segment["metadata"]["defuse"]["location"]["x"],
+                                    "y": segment["metadata"]["defuse"]["location"]["y"],
+                                },
+                                "site": segment["metadata"]["defuse"]["site"],
+                                "round_time": segment["metadata"]["defuse"][
+                                    "roundTime"
+                                ],
+                                "player_locations": [
+                                    {
+                                        "player_name": username_to_name(
+                                            d["platformUserIdentifier"].split("#")[0]
+                                        ),
+                                        "angle": d["viewRadians"],
+                                        "location": {
+                                            "x": d["location"]["x"],
+                                            "y": d["location"]["y"],
+                                        },
+                                    }
+                                    for d in segment["metadata"]["defuse"][
+                                        "playerLocations"
+                                    ]
+                                ],
+                            }
+                            if segment["metadata"]["defuse"]
+                            else None
+                        )
+                        match["rounds"][round_index]["exploded"] = segment["metadata"][
+                            "exploded"
+                        ]
 
                     case "player-round":
                         round_index = segment["attributes"]["round"] - 1
@@ -149,21 +219,19 @@ def parse_scrape() -> list[Match]:
                                     "damageItem"
                                 ]
 
-                        player_locations = list(
-                            map(
-                                lambda d: {
-                                    "player_name": username_to_name(
-                                        d["platformUserIdentifier"].split("#")[0]
-                                    ),
-                                    "angle": d["viewRadians"],
-                                    "location": {
-                                        "x": d["location"]["x"],
-                                        "y": d["location"]["y"],
-                                    },
+                        player_locations = [
+                            {
+                                "player_name": username_to_name(
+                                    d["platformUserIdentifier"].split("#")[0]
+                                ),
+                                "angle": d["viewRadians"],
+                                "location": {
+                                    "x": d["location"]["x"],
+                                    "y": d["location"]["y"],
                                 },
-                                segment["metadata"]["playerLocations"],
-                            ),
-                        )
+                            }
+                            for d in segment["metadata"]["playerLocations"]
+                        ]
 
                         killer_location = None
                         for d in player_locations:
@@ -174,14 +242,12 @@ def parse_scrape() -> list[Match]:
                             {
                                 "killer_name": killer_name,
                                 "victim_name": victim_name,
-                                "assistants": list(
-                                    map(
-                                        lambda d: username_to_name(
-                                            d["platformUserIdentifier"].split("#")[0]
-                                        ),
-                                        segment["metadata"]["assistants"],
+                                "assistants": [
+                                    username_to_name(
+                                        d["platformUserIdentifier"].split("#")[0]
                                     )
-                                ),
+                                    for d in segment["metadata"]["assistants"]
+                                ],
                                 "killer_location": killer_location,
                                 "victim_location": {
                                     "x": segment["metadata"]["opponentLocation"]["x"],

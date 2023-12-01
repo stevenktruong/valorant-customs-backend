@@ -39,6 +39,7 @@ class PlayerRoundStats:
         self.spent_credits: int = player_round_stats_json["spent_credits"]
 
 
+# TODO: Need more consistent naming. Maybe just "Damage" or add "Event" to the other classes
 class DamageEvent:
     def __init__(self, damage_event_json):
         self.giver_name: str = damage_event_json["giver_name"]
@@ -55,11 +56,10 @@ class Location:
         self.y: int = location_json["y"]
 
 
-class LocationWithAngle:
+class LocationWithAngle(Location):
     def __init__(self, location_with_angle_json):
         self.angle: float = location_with_angle_json["angle"]
-        self.x: int = location_with_angle_json["location"]["x"]
-        self.y: int = location_with_angle_json["location"]["y"]
+        super().__init__(location_with_angle_json["location"])
 
 
 class Kill:
@@ -85,11 +85,39 @@ class Kill:
         self.damage: int = kill_json["damage"]
 
 
+class Plant:
+    def __init__(self, plant_json):
+        self.planter_name: str = plant_json["planter_name"]
+        self.location: Location = Location(plant_json["location"])
+        self.site: str = plant_json["site"]
+        self.round_time: int = plant_json["round_time"]
+        self.player_locations: dict[str, LocationWithAngle] = {
+            player_locations_json["player_name"]: LocationWithAngle(
+                player_locations_json
+            )
+            for player_locations_json in plant_json["player_locations"]
+        }
+
+
+class Defuse:
+    def __init__(self, defuse_json):
+        self.defuser_name: str = defuse_json["defuser_name"]
+        self.location: Location = Location(defuse_json["location"])
+        self.site: str = defuse_json["site"]
+        self.round_time: int = defuse_json["round_time"]
+        self.player_locations: dict[str, LocationWithAngle] = {
+            player_locations_json["player_name"]: LocationWithAngle(
+                player_locations_json
+            )
+            for player_locations_json in defuse_json["player_locations"]
+        }
+
+
 class Round:
     def __init__(self, round_json):
-        self.winning_team: str = round_json["winning_team"]
-        self.winning_side: str = round_json["winning_side"]
-        self.win_method: str = round_json["win_method"]
+        self.winning_team: str = round_json["winning_team"]  # TODO: Enum this
+        self.winning_side: str = round_json["winning_side"]  # TODO: Enum this
+        self.win_method: str = round_json["win_method"]  # TODO: Enum this
         self.duration: int = round_json["duration"]  # milliseconds
         self.player_stats: dict[str, PlayerRoundStats] = {
             player_round_stats_json["player_name"]: PlayerRoundStats(
@@ -102,6 +130,13 @@ class Round:
             for damage_event_json in round_json["damage_events"]
         ]
         self.kills: list[Kill] = [Kill(kill_json) for kill_json in round_json["kills"]]
+        self.plant: Plant | None = (
+            Plant(round_json["plant"]) if round_json["plant"] else None
+        )
+        self.defuse: Defuse | None = (
+            Defuse(round_json["defuse"]) if round_json["defuse"] else None
+        )
+        self.explode_time: float | None = round_json["exploded"]
 
     def player_did_die(self, player_name):
         for kill in self.kills:
@@ -131,9 +166,11 @@ class Match:
 
         self.all_players = self.team_red | self.team_blue
         if self.score_red > self.score_blue:
+            self.winning_team = "red"
             self.winning_players: dict[str, Player] = self.team_red
             self.losing_players: dict[str, Player] = self.team_blue
         else:
+            self.winning_team = "blue"
             self.winning_players: dict[str, Player] = self.team_blue
             self.losing_players: dict[str, Player] = self.team_red
 
@@ -153,7 +190,7 @@ class Match:
         return player_name in self.losing_players
 
     def all_players_did_lose(self, *PLAYER_NAMES):
-        return all([self.players_did_lose(player_name) for player_name in PLAYER_NAMES])
+        return all([self.player_did_lose(player_name) for player_name in PLAYER_NAMES])
 
     def players_in_same_team(self, *PLAYER_NAMES):
         return all(
