@@ -34,9 +34,9 @@ def username_to_name(username):
     return TAG_TO_PLAYER_NAME.get(username, username)
 
 
-def parse_scrape() -> list[Match]:
+def parse_scrape(scrape_path) -> list[Match]:
     matches_json = []
-    with jsonlines.open("./scrape.jsonl", mode="r") as f:
+    with jsonlines.open(scrape_path, mode="r") as f:
         for match_json in f:
             match = {
                 "time": match_json["metadata"]["dateStarted"],
@@ -366,4 +366,4 @@ def parse_scrape() -> list[Match]:
 
 
 if __name__ == "__main__":
-    parse_scrape()
+    parse_scrape("./scrape.jsonl")

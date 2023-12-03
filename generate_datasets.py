@@ -66,5 +66,5 @@ def generate_datasets(matches: list[Match], output_dir, minified=False):
 
 
 if __name__ == "__main__":
-    matches = parse_scrape()
+    matches = parse_scrape("./scrape.jsonl")
     generate_datasets(matches=matches, output_dir="./out-min", minified=True)

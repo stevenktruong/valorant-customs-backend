@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print("Done")
 
         print("Attempting to parse the scrape")
-        matches = parse_scrape()
+        matches = parse_scrape("scrape.jsonl")
         print("Done")
 
         print("Attempting to generate datasets")

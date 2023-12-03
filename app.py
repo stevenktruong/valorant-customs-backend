@@ -23,7 +23,7 @@ def refresh_datasets():
     app.logger.info("Refreshing datasets")
     with database_lock:
         scrape_all()
-        matches = parse_scrape()
+        matches = parse_scrape("./scrape.jsonl")
         generate_datasets(matches=matches, output_dir="./out-min", minified=True)
     app.logger.info("Done")
 

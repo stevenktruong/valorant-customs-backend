@@ -19,7 +19,7 @@ def new_driver():
     options.add_argument("--headless")
     if PROXY:
         options.add_argument(f"--proxy-server={PROXY}")
-    return uc.Chrome(options=options, version_main=116)
+    return uc.Chrome(options=options)
 
 
 def scrape_url(url: str, driver=None):

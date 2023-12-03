@@ -104,7 +104,7 @@ def add_url_job(tracker_url: str):
             f.close()
 
         logger.info("Processing updated scraped data")
-        matches = parse_scrape()
+        matches = parse_scrape("./scrape.jsonl")
 
         logger.info("Updating out-min")
         generate_datasets(matches=matches, output_dir="./out-min", minified=True)
@@ -144,7 +144,7 @@ def remove_url_job(tracker_url: str):
         os.remove("./scrape.jsonl.old")
 
         logger.info("Processing updated scraped data")
-        matches = parse_scrape()
+        matches = parse_scrape("./scrape.jsonl")
 
         logger.info("Updating out-min")
         generate_datasets(matches=matches, output_dir="./out-min", minified=True)
