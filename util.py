@@ -6,11 +6,7 @@ from Match import Location
 
 
 def filter_players(player_list) -> list[PlayerName]:
-    return [
-        PlayerName(player_name)
-        for player_name in player_list
-        if player_name in PlayerName
-    ]
+    return [player_name for player_name in player_list if player_name in PlayerName]
 
 
 def is_valid_tracker_url(tracker_url: str) -> bool:

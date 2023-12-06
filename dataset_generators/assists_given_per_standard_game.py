@@ -42,7 +42,7 @@ class AssistsGivenPerStandardGameGenerator(DatasetGenerator):
                 if not assisted_name in PlayerName:
                     continue
                 for player_name in filter_players(kill.assistants):
-                    self.out_json[player_name][PlayerName(assisted_name)][ASSISTS] += 1
+                    self.out_json[player_name][assisted_name][ASSISTS] += 1
 
     def finalize(self, minified=False):
         for player_name in PlayerName:
