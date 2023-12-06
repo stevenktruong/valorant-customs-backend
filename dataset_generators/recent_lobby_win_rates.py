@@ -2,7 +2,7 @@ from datetime import datetime, time, timedelta
 
 from pytz import timezone
 
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
 from util import filter_players
@@ -19,7 +19,7 @@ class RecentLobbyWinRatesGenerator(DatasetGenerator):
                 WINS: 0,
                 GAMES: 0,
             }
-            for player_name in PLAYER_NAMES
+            for player_name in PlayerName
         }
 
         self.curr_date = datetime.combine(
@@ -41,7 +41,7 @@ class RecentLobbyWinRatesGenerator(DatasetGenerator):
                     player_entry[GAMES] += 1
 
     def finalize(self, minified=False):
-        for player_name in PLAYER_NAMES:
+        for player_name in PlayerName:
             player_entry = self.out_json[player_name]
 
             if player_entry[GAMES] != 0:

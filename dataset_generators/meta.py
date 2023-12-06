@@ -14,7 +14,7 @@ class MetaGenerator(DatasetGenerator):
         }
 
     def accumulate(self, match: Match):
-        self.out_json[MOST_RECENT_URL] = match.url
+        self.out_json[MOST_RECENT_URL] = f"https://tracker.gg/valorant/match/{match.id}"
 
     def finalize(self, minified=False):
         return self.out_json

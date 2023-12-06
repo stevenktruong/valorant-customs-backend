@@ -6,10 +6,9 @@ from flask import Flask
 from flask_cors import CORS
 
 import api
+from data_providers import fetch_all, get_matches
 from generate_datasets import generate_datasets
 from locks import database_lock
-from parse_scrape import parse_scrape
-from scrape import scrape_all
 
 app = Flask(__name__)
 CORS(app)
@@ -22,8 +21,8 @@ app.logger.setLevel(gunicorn_logger.level)
 def refresh_datasets():
     app.logger.info("Refreshing datasets")
     with database_lock:
-        scrape_all()
-        matches = parse_scrape("./scrape.jsonl")
+        fetch_all()
+        matches = get_matches()
         generate_datasets(matches=matches, output_dir="./out-min", minified=True)
     app.logger.info("Done")
 

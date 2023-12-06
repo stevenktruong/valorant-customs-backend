@@ -1,4 +1,4 @@
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
 from util import filter_players
@@ -19,9 +19,9 @@ class EasiestMatchupsGenerator(DatasetGenerator):
                     WINS: 0,
                     GAMES: 0,
                 }
-                for opponent_name in PLAYER_NAMES
+                for opponent_name in PlayerName
             }
-            for player_name in PLAYER_NAMES
+            for player_name in PlayerName
         }
 
     def accumulate(self, match: Match):
@@ -45,11 +45,15 @@ class EasiestMatchupsGenerator(DatasetGenerator):
 
         for player_name in self.out_json:
             if minified:
-                for opponent_name in PLAYER_NAMES:
+                for opponent_name in PlayerName:
                     del self.out_json[player_name][opponent_name][WINS]
                     del self.out_json[player_name][opponent_name][GAMES]
-            self.out_json[player_name] = sorted(
-                self.out_json[player_name].values(), key=lambda x: x[OPPONENT_NAME]
-            )
+            self.out_json[player_name] = {
+                k: v
+                for k, v in sorted(
+                    self.out_json[player_name].items(),
+                    key=lambda x: x[1][OPPONENT_NAME],
+                )
+            }
 
         return self.out_json

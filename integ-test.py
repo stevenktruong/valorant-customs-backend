@@ -1,12 +1,11 @@
 import os
 import shutil
+from data_providers import fetch_all, get_matches
 
 from generate_datasets import generate_datasets
-from parse_scrape import parse_scrape
-from scrape import scrape_all
 
-TEST_URLS = [
-    "https://tracker.gg/valorant/match/ec43c688-2e7f-4b1b-93a3-136bd13ef45b",
+TEST_MATCH_IDS = [
+    "61cc8a7a-fb97-4955-b109-76aab9ae2e3b",
 ]
 
 INTEG_TEST_DIR_NAME = "integ-test"
@@ -20,14 +19,14 @@ if __name__ == "__main__":
 
     try:
         print("Attempting to scrape test URL")
-        with open("tracker-urls.txt", mode="x") as f:
-            f.writelines(map(lambda x: f"{x}\n", TEST_URLS))
+        with open("match-ids.txt", mode="x") as f:
+            f.writelines(map(lambda x: f"{x}\n", TEST_MATCH_IDS))
             f.close()
-        scrape_all()
+        fetch_all()
         print("Done")
 
         print("Attempting to parse the scrape")
-        matches = parse_scrape("scrape.jsonl")
+        matches = get_matches()
         print("Done")
 
         print("Attempting to generate datasets")
@@ -36,8 +35,6 @@ if __name__ == "__main__":
         print("Done")
 
         print("Integration test passed. Cleaning up")
-    except Exception as e:
-        print(f"Integration test failed: {e}. Cleaning up")
     finally:
         os.chdir("..")
         shutil.rmtree(INTEG_TEST_DIR_NAME)

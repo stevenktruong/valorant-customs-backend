@@ -1,4 +1,4 @@
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
 from util import filter_players
@@ -18,8 +18,8 @@ class TeamSynergyDataGenerator(DatasetGenerator):
 
     def accumulate(self, match: Match):
         out_row = (
-            {player_name: DID_NOT_PLAY for player_name in PLAYER_NAMES}
-            | {player_name + "_acs": DID_NOT_PLAY for player_name in PLAYER_NAMES}
+            {player_name: DID_NOT_PLAY for player_name in PlayerName}
+            | {player_name + "_acs": DID_NOT_PLAY for player_name in PlayerName}
             | {SCORE_DELTA: 0}
         )
 

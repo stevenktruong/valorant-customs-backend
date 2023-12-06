@@ -1,4 +1,4 @@
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
 from util import filter_players
@@ -46,12 +46,12 @@ class WallOfShameGenerator(DatasetGenerator):
                 LONGEST_LOSE_STREAK: 0,
                 LONGEST_WIN_STREAK: 0,
             }
-            for player_name in PLAYER_NAMES
+            for player_name in PlayerName
         }
-        self.won_attack_rounds = {player_name: 0 for player_name in PLAYER_NAMES}
-        self.lost_attack_rounds = {player_name: 0 for player_name in PLAYER_NAMES}
-        self.current_lose_streak = {player_name: 0 for player_name in PLAYER_NAMES}
-        self.current_win_streak = {player_name: 0 for player_name in PLAYER_NAMES}
+        self.won_attack_rounds = {player_name: 0 for player_name in PlayerName}
+        self.lost_attack_rounds = {player_name: 0 for player_name in PlayerName}
+        self.current_lose_streak = {player_name: 0 for player_name in PlayerName}
+        self.current_win_streak = {player_name: 0 for player_name in PlayerName}
 
     def accumulate(self, match: Match):
         for player_name in filter_players(match.all_players):
@@ -81,7 +81,7 @@ class WallOfShameGenerator(DatasetGenerator):
                 giver_name = damage_event.giver_name
                 receiver_name = damage_event.receiver_name
 
-                if giver_name in PLAYER_NAMES:
+                if isinstance(giver_name, PlayerName):
                     if (
                         match.players_in_same_team(giver_name, receiver_name)
                         and damage_event.damage < 800
@@ -113,11 +113,11 @@ class WallOfShameGenerator(DatasetGenerator):
 
                 if (
                     victim_name not in handled_players
-                    and _round.player_stats[victim_name].side == ATTACKERS
-                    and victim_name in PLAYER_NAMES
+                    and _round.player_stats[victim_name].side == Side.ATTACKERS
+                    and isinstance(victim_name, PlayerName)
                 ):
                     handled_players.add(victim_name)
-                    if _round.winning_side == ATTACKERS:
+                    if _round.winning_side == Side.ATTACKERS:
                         self.out_json[victim_name][
                             AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS
                         ] += kill.round_time
@@ -127,30 +127,30 @@ class WallOfShameGenerator(DatasetGenerator):
                         ] += kill.round_time
 
                 if kill.weapon_name == "Melee":
-                    if killer_name in PLAYER_NAMES:
+                    if isinstance(killer_name, PlayerName):
                         self.out_json[killer_name][KNIFE_KILLS] += 1
-                    if victim_name in PLAYER_NAMES:
+                    if isinstance(victim_name, PlayerName):
                         self.out_json[victim_name][KNIFE_DEATHS] += 1
 
                 if kill.weapon_name == "Bomb":
-                    if victim_name in PLAYER_NAMES:
+                    if isinstance(victim_name, PlayerName):
                         self.out_json[victim_name][BOMB_DEATHS] += 1
 
             for player_name in filter_players(match.all_players):
                 if (
-                    _round.player_stats[player_name].side != ATTACKERS
-                    or _round.win_method == SURRENDERED
+                    _round.player_stats[player_name].side != Side.ATTACKERS
+                    or _round.win_method == WinMethod.SURRENDER
                 ):
                     continue
 
-                if _round.winning_side == ATTACKERS:
+                if _round.winning_side == Side.ATTACKERS:
                     self.won_attack_rounds[player_name] += 1
                 else:
                     self.lost_attack_rounds[player_name] += 1
 
                 # If a player didn't die, they survived the whole round
                 if _round.player_stats[player_name].deaths == 0:
-                    if _round.winning_side == ATTACKERS:
+                    if _round.winning_side == Side.ATTACKERS:
                         self.out_json[player_name][
                             AVERAGE_TIME_ALIVE_ON_WON_ATTACK_ROUNDS
                         ] += _round.duration
@@ -160,7 +160,7 @@ class WallOfShameGenerator(DatasetGenerator):
                         ] += _round.duration
 
     def finalize(self, minified=False):
-        for player_name in PLAYER_NAMES:
+        for player_name in PlayerName:
             if self.out_json[player_name][BULLETS] != 0:
                 self.out_json[player_name][HEADSHOT_RATE] = round(
                     100

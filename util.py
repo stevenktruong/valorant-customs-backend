@@ -1,16 +1,16 @@
 from urllib.parse import urlparse
 
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Location
 
 
-def is_player_of_interest(player_name):
-    return player_name in PLAYER_NAMES
-
-
-def filter_players(player_list):
-    return list(filter(is_player_of_interest, player_list))
+def filter_players(player_list) -> list[PlayerName]:
+    return [
+        player_name
+        for player_name in player_list
+        if isinstance(player_name, PlayerName)
+    ]
 
 
 def is_valid_tracker_url(tracker_url: str) -> bool:

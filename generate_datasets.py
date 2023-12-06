@@ -1,9 +1,9 @@
 import json
 import os.path
+from data_providers import get_matches
 
 from dataset_generators import *
 from Match import Match
-from parse_scrape import parse_scrape
 
 
 def generate_datasets(matches: list[Match], output_dir, minified=False):
@@ -66,5 +66,5 @@ def generate_datasets(matches: list[Match], output_dir, minified=False):
 
 
 if __name__ == "__main__":
-    matches = parse_scrape("./scrape.jsonl")
+    matches = get_matches()
     generate_datasets(matches=matches, output_dir="./out-min", minified=True)

@@ -2,6 +2,14 @@ __pycache__
 env
 .DS_Store
 
-scrape.jsonl
+# Databases
+api-data.jsonl
+tracker-data.jsonl
+
+# Generated files
 out-min
+
+# Test files
 test
+api-out.json
+tracker-out.json

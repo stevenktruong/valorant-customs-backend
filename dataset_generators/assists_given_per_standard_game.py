@@ -1,7 +1,7 @@
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
-from util import filter_players, is_player_of_interest
+from util import filter_players
 
 from .DatasetGenerator import DatasetGenerator
 
@@ -19,9 +19,9 @@ class AssistsGivenPerStandardGameGenerator(DatasetGenerator):
                     ASSISTS: 0,
                     ROUNDS: 0,
                 }
-                for assisted_name in PLAYER_NAMES
+                for assisted_name in PlayerName
             }
-            for player_name in PLAYER_NAMES
+            for player_name in PlayerName
         }
 
     def accumulate(self, match: Match):
@@ -39,14 +39,14 @@ class AssistsGivenPerStandardGameGenerator(DatasetGenerator):
                 if kill.killer_name == kill.victim_name:
                     continue
                 assisted_name = kill.killer_name
-                if not is_player_of_interest(assisted_name):
+                if not isinstance(assisted_name, PlayerName):
                     continue
                 for player_name in filter_players(kill.assistants):
                     self.out_json[player_name][assisted_name][ASSISTS] += 1
 
     def finalize(self, minified=False):
-        for player_name in PLAYER_NAMES:
-            for assistant_name in PLAYER_NAMES:
+        for player_name in PlayerName:
+            for assistant_name in PlayerName:
                 if self.out_json[player_name][assistant_name][ROUNDS] != 0:
                     self.out_json[player_name][assistant_name][
                         ASSISTS_PER_STANDARD_GAME
@@ -61,8 +61,12 @@ class AssistsGivenPerStandardGameGenerator(DatasetGenerator):
                     )
 
         for player_name in self.out_json:
-            self.out_json[player_name] = sorted(
-                self.out_json[player_name].values(), key=lambda x: x[ASSISTED_NAME]
-            )
+            self.out_json[player_name] = {
+                k: v
+                for k, v in sorted(
+                    self.out_json[player_name].items(),
+                    key=lambda x: x[1][ASSISTED_NAME],
+                )
+            }
 
         return self.out_json

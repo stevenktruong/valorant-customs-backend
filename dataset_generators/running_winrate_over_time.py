@@ -2,7 +2,7 @@ from datetime import datetime, time, timedelta
 
 from pytz import timezone
 
-from config import PLAYER_NAMES
+from config import PlayerName
 from constants import *
 from Match import Match
 from util import filter_players
@@ -40,7 +40,7 @@ class RunningWinrateOverTimeGenerator(DatasetGenerator):
                     BLOCK_END_TIME: self.curr_block_end_date.isoformat(),
                     DATA: {
                         player_name: {WINRATE: None, WINS: 0, GAMES: 0}
-                        for player_name in PLAYER_NAMES
+                        for player_name in PlayerName
                     },
                 }
             )
@@ -63,7 +63,7 @@ class RunningWinrateOverTimeGenerator(DatasetGenerator):
                         WINS: prev_block[DATA][player_name][WINS],
                         GAMES: prev_block[DATA][player_name][GAMES],
                     }
-                    for player_name in PLAYER_NAMES
+                    for player_name in PlayerName
                 },
             }
 
