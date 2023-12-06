@@ -352,14 +352,12 @@ def scrape_all(driver=None):
     if os.path.exists("./tracker-urls.txt"):
         with open("./tracker-urls.txt", mode="r") as f:
             urls = [line.rstrip() for line in f]
-        f.close()
 
     matches = []
     if os.path.exists("./scrape.jsonl"):
         with jsonlines.open("./scrape.jsonl", mode="r") as f:
             for match in f:
                 matches.append(match)
-        f.close()
 
     for match in matches:
         if match["tracker_url"] in urls:
@@ -397,7 +395,6 @@ def scrape_all(driver=None):
     print("Saving... ", end="")
     with jsonlines.open("./scrape.jsonl", mode="a") as f:
         f.write_all(new_matches)
-        f.close()
     print("Done")
 
     driver.close()

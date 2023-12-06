@@ -6,6 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 
 import api
+from config import CONFIG_PATH, MATCH_IDS_PATH, OUT_MIN, OUT_MIN_DASHBOARD_PATH
 from data_providers import fetch_all, get_matches
 from generate_datasets import generate_datasets
 from locks import database_lock
@@ -23,23 +24,20 @@ def refresh_datasets():
     with database_lock:
         fetch_all()
         matches = get_matches()
-        generate_datasets(matches=matches, output_dir="./out-min", minified=True)
+        generate_datasets(matches=matches, output_dir=OUT_MIN, minified=True)
     app.logger.info("Done")
 
 
 # Make sure out-min is populated before starting the server and
-# refresh the dataset if tracker-urls.txt or config.py is newer than the
+# refresh the dataset if match-ids.txt or config.py is newer than the
 # last refreshed dataset.
-if not os.path.exists("out-min"):
-    os.mkdir("out-min")
+if not os.path.exists(OUT_MIN):
+    os.mkdir(OUT_MIN)
 
 if (
-    not os.path.exists("out-min/dashboard.json")
-    or (
-        os.path.getmtime("out-min/dashboard.json")
-        < os.path.getmtime("tracker-urls.txt")
-    )
-    or os.path.getmtime("config.py") < os.path.getmtime("tracker-urls.txt")
+    not os.path.exists(OUT_MIN_DASHBOARD_PATH)
+    or (os.path.getmtime(OUT_MIN_DASHBOARD_PATH) < os.path.getmtime(MATCH_IDS_PATH))
+    or os.path.getmtime(CONFIG_PATH) < os.path.getmtime(MATCH_IDS_PATH)
 ):
     refresh_datasets()
 
@@ -59,6 +57,6 @@ app.add_url_rule(
     methods=["GET"],
 )
 
-app.add_url_rule("/match/all", view_func=api.match.all_urls, methods=["GET"])
+app.add_url_rule("/match/all", view_func=api.match.all_match_ids, methods=["GET"])
 app.add_url_rule("/match", view_func=api.match.add_url, methods=["POST"])
 app.add_url_rule("/match", view_func=api.match.remove_url, methods=["DELETE"])

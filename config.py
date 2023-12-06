@@ -1,4 +1,4 @@
-from constants import *
+from constants import PlayerName
 
 TAG_TO_PLAYER_NAME: dict[str, PlayerName] = {
     "JHardRTolkien": PlayerName.BRANDON,
@@ -33,5 +33,15 @@ TAG_TO_PLAYER_NAME: dict[str, PlayerName] = {
     "tangy": PlayerName.TANG,
     "Tyblerone": PlayerName.YANG,
 }
+
+# Relative file/folder paths
+CONFIG_PATH = "config.py"
+MATCH_IDS_PATH = "match-ids.txt"
+TRACKER_DATA_PATH = "tracker-data.jsonl"
+API_DATA_PATH = "api-data.jsonl"
+
+OUT_MIN = "out-min"
+OUT_MIN_DASHBOARD_PATH = f"{OUT_MIN}/dashboard.json"
+OUT_MIN_WALL_OF_SHAME_PATH = f"{OUT_MIN}/wall_of_shame.json"
 
 PROXY = None

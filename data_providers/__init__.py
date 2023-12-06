@@ -1,9 +1,15 @@
+import os
 import time
-import jsonlines, os
 
-from data_providers.tracker import TrackerProvider
+import jsonlines
+
+from config import API_DATA_PATH, MATCH_IDS_PATH, TRACKER_DATA_PATH
 from data_providers.api import ApiProvider
+from data_providers.tracker import TrackerProvider
 from Match import Match
+
+api = ApiProvider()
+tracker = TrackerProvider()
 
 
 def fetch_all():
@@ -11,29 +17,29 @@ def fetch_all():
     Fetch all matches listed in match-ids.txt but not in api-out.jsonl or tracker-data.jsonl.
     """
 
-    api = ApiProvider()
-
     # Starting from 12/2/23
     match_ids = []
-    if os.path.exists("match-ids.txt"):
-        with open("match-ids.txt", mode="r") as f:
+    if os.path.exists(MATCH_IDS_PATH):
+        with open(MATCH_IDS_PATH, mode="r") as f:
             match_ids.extend([line.rstrip() for line in f])
-        f.close()
 
-    matches = []
-    if os.path.exists("api-data.jsonl"):
-        with jsonlines.open("api-data.jsonl", mode="r") as f:
-            matches.extend([match for match in f])
-        f.close()
+    if os.path.exists(API_DATA_PATH):
+        with jsonlines.open(API_DATA_PATH, mode="r") as f:
+            for match_id in [
+                match_json["metadata"]["matchid"]
+                for match_json in f
+                if match_json["metadata"]["matchid"] in match_ids
+            ]:
+                match_ids.remove(match_id)
 
-    if os.path.exists("tracker-data.jsonl"):
-        with jsonlines.open("tracker-data.jsonl", mode="r") as f:
-            matches.extend([match for match in f])
-        f.close()
-
-    for match in matches:
-        if match["metadata"]["matchid"] in match_ids:
-            match_ids.remove(match["metadata"]["matchid"])
+    if os.path.exists(TRACKER_DATA_PATH):
+        with jsonlines.open(TRACKER_DATA_PATH, mode="r") as f:
+            for match_id in [
+                match_json["attributes"]["id"]
+                for match_json in f
+                if match_json["attributes"]["id"] in match_ids
+            ]:
+                match_ids.remove(match_id)
 
     if len(match_ids) == 0:
         return
@@ -62,10 +68,17 @@ def fetch_all():
                 continue
 
     print("Saving... ", end="")
-    with jsonlines.open("api-data.jsonl", mode="a") as f:
+    with jsonlines.open(API_DATA_PATH, mode="a") as f:
         f.write_all(new_matches)
-        f.close()
     print("Done")
+
+
+def get_match_ids() -> list[str]:
+    match_ids = []
+    if os.path.exists(MATCH_IDS_PATH):
+        with open(MATCH_IDS_PATH, mode="r") as f:
+            match_ids.extend([line.rstrip() for line in f])
+    return match_ids
 
 
 def get_matches() -> list[Match]:
@@ -80,19 +93,15 @@ def get_matches() -> list[Match]:
     to migrate over to the unofficial API. This will read both datasets, parse
     them, and merge them.
     """
-    api = ApiProvider()
-    tracker = TrackerProvider()
 
     matches_json = []
-    if os.path.exists("tracker-data.jsonl"):
-        with jsonlines.open("tracker-data.jsonl", mode="r") as f:
+    if os.path.exists(TRACKER_DATA_PATH):
+        with jsonlines.open(TRACKER_DATA_PATH, mode="r") as f:
             matches_json.extend([tracker.parse(match_json) for match_json in f])
-            f.close()
 
-    if os.path.exists("api-data.jsonl"):
-        with jsonlines.open("api-data.jsonl", mode="r") as f:
+    if os.path.exists(API_DATA_PATH):
+        with jsonlines.open(API_DATA_PATH, mode="r") as f:
             matches_json.extend([api.parse(match_json) for match_json in f])
-            f.close()
 
     return [Match(match_json) for match_json in matches_json]
 

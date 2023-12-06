@@ -1,4 +1,4 @@
-from flask import app, send_file
+from flask import send_file
 
 
 def dashboard():

@@ -1,7 +1,7 @@
 import json
 import os.path
-from data_providers import get_matches
 
+from data_providers import get_matches
 from dataset_generators import *
 from Match import Match
 
@@ -57,12 +57,6 @@ def generate_datasets(matches: list[Match], output_dir, minified=False):
 
     with open(os.path.join(output_dir, "dashboard.json"), mode="w") as f:
         json.dump(dashboard_json, f, indent=indent, separators=separators)
-        f.close()
-
-    # with open(os.path.join(output_dir, "data-frame-friendly.json"), mode="w") as f:
-    #     out_json = {i: match_json for i, match_json in enumerate(data)}
-    #     json.dump(out_json, f, indent=indent, separators=separators)
-    #     f.close()
 
 
 if __name__ == "__main__":

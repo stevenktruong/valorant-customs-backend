@@ -3,7 +3,6 @@ from urllib import parse
 import requests
 
 from data_providers.DataProvider import DataProvider
-
 from data_providers.util import side, username_to_name
 
 BASE_URL = "https://api.henrikdev.xyz/"

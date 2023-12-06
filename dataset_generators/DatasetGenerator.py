@@ -31,4 +31,3 @@ class DatasetGenerator:
 
         with open(os.path.join(output_dir, f"{self.name}.json"), mode="w") as f:
             json.dump(self.out_json, f, indent=indent, separators=separators)
-            f.close()

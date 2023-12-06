@@ -1,7 +1,9 @@
 import json
 from pprint import pprint
+
 from deepdiff import DeepDiff
-from data_providers import ApiProvider, TrackerProvider
+
+from data_providers import api, tracker
 
 # Test against samples:
 # fcfce360-0978-475d-a8c2-5244344cd921 (knife kills; 30 rounds)
@@ -10,9 +12,6 @@ from data_providers import ApiProvider, TrackerProvider
 # 61cc8a7a-fb97-4955-b109-76aab9ae2e3b (timer ran out on a round)
 
 match_id = "61cc8a7a-fb97-4955-b109-76aab9ae2e3b"
-
-api = ApiProvider()
-tracker = TrackerProvider()
 
 
 a = api.parse(json.load(open(f"samples/{match_id}/api.json", mode="r")))

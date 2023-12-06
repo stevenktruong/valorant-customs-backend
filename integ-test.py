@@ -1,7 +1,9 @@
 import os
 import shutil
-from data_providers import fetch_all, get_matches
+import time
 
+from config import MATCH_IDS_PATH
+from data_providers import fetch_all, get_matches
 from generate_datasets import generate_datasets
 
 TEST_MATCH_IDS = [
@@ -18,21 +20,26 @@ if __name__ == "__main__":
     os.chdir(INTEG_TEST_DIR_NAME)
 
     try:
-        print("Attempting to scrape test URL")
-        with open("match-ids.txt", mode="x") as f:
+        print("--- Attempting to fetch test match data")
+        start = time.perf_counter()
+        with open(MATCH_IDS_PATH, mode="x") as f:
             f.writelines(map(lambda x: f"{x}\n", TEST_MATCH_IDS))
-            f.close()
         fetch_all()
-        print("Done")
+        end = time.perf_counter()
+        print(f"Done in {end - start}s")
 
-        print("Attempting to parse the scrape")
+        print("--- Attempting to parse the match data")
+        start = time.perf_counter()
         matches = get_matches()
-        print("Done")
+        end = time.perf_counter()
+        print(f"Done in {end - start}s")
 
-        print("Attempting to generate datasets")
+        print("--- Attempting to generate datasets")
+        start = time.perf_counter()
         os.mkdir("out-min")
         generate_datasets(matches, "out-min")
-        print("Done")
+        end = time.perf_counter()
+        print(f"Done in {end - start}s")
 
         print("Integration test passed. Cleaning up")
     finally:
