@@ -7,9 +7,9 @@ from Match import Location
 
 def filter_players(player_list) -> list[PlayerName]:
     return [
-        player_name
+        PlayerName(player_name)
         for player_name in player_list
-        if isinstance(player_name, PlayerName)
+        if player_name in PlayerName
     ]
 
 

@@ -39,7 +39,7 @@ class AssistsReceivedPerStandardGameGenerator(DatasetGenerator):
                 if kill.killer_name == kill.victim_name:
                     continue
                 player_name = kill.killer_name
-                if not isinstance(player_name, PlayerName):
+                if not player_name in PlayerName:
                     continue
                 for assistant_name in filter_players(kill.assistants):
                     self.out_json[player_name][assistant_name][ASSISTS] += 1
@@ -61,12 +61,9 @@ class AssistsReceivedPerStandardGameGenerator(DatasetGenerator):
                     )
 
         for player_name in self.out_json:
-            self.out_json[player_name] = {
-                k: v
-                for k, v in sorted(
-                    self.out_json[player_name].items(),
-                    key=lambda x: x[1][ASSISTANT_NAME],
-                )
-            }
+            self.out_json[player_name] = sorted(
+                self.out_json[player_name].values(),
+                key=lambda x: x[ASSISTANT_NAME],
+            )
 
         return self.out_json

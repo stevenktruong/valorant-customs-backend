@@ -8,8 +8,8 @@ from constants import *
 
 class Player:
     def __init__(self, player_json):
-        self.player_name: PlayerName = player_json["player_name"]
-        self.agent: Agent = player_json["agent"]
+        self.player_name: str = player_json["player_name"]
+        self.agent: Agent = Agent(player_json["agent"])
         self.average_combat_score: int = player_json["average_combat_score"]
         self.kills: int = player_json["kills"]
         self.deaths: int = player_json["deaths"]
@@ -44,8 +44,8 @@ class PlayerRoundStats:
 # TODO: Need more consistent naming. Maybe just "Damage" or add "Event" to the other classes
 class DamageEvent:
     def __init__(self, damage_event_json):
-        self.giver_name: PlayerName = damage_event_json["giver_name"]
-        self.receiver_name: PlayerName = damage_event_json["receiver_name"]
+        self.giver_name: str = damage_event_json["giver_name"]
+        self.receiver_name: str = damage_event_json["receiver_name"]
         self.damage: int = damage_event_json["damage"]
         self.legshots: int = damage_event_json["legshots"]
         self.bodyshots: int = damage_event_json["bodyshots"]
@@ -66,8 +66,8 @@ class LocationWithAngle(Location):
 
 class Kill:
     def __init__(self, kill_json):
-        self.killer_name: PlayerName = kill_json["killer_name"]
-        self.victim_name: PlayerName = kill_json["victim_name"]
+        self.killer_name: str = kill_json["killer_name"]
+        self.victim_name: str = kill_json["victim_name"]
         self.killer_location: Optional[LocationWithAngle] = (
             LocationWithAngle(kill_json["killer_location"])
             if kill_json["killer_location"]
@@ -80,7 +80,7 @@ class Kill:
             )
             for player_locations_json in kill_json["player_locations"]
         }
-        self.assistants: list[PlayerName] = kill_json["assistants"]
+        self.assistants: list[str] = kill_json["assistants"]
         self.weapon_name: str = kill_json["weapon_name"]
         self.game_time: int = kill_json["game_time"]
         self.round_time: int = kill_json["round_time"]
@@ -89,7 +89,7 @@ class Kill:
 
 class Plant:
     def __init__(self, plant_json):
-        self.planter_name: PlayerName = plant_json["planter_name"]
+        self.planter_name: str = plant_json["planter_name"]
         self.location: Location = Location(plant_json["location"])
         self.site: str = plant_json["site"]
         self.round_time: int = plant_json["round_time"]
@@ -103,7 +103,7 @@ class Plant:
 
 class Defuse:
     def __init__(self, defuse_json):
-        self.defuser_name: PlayerName = defuse_json["defuser_name"]
+        self.defuser_name: str = defuse_json["defuser_name"]
         self.location: Location = Location(defuse_json["location"])
         self.site: str = defuse_json["site"]
         self.round_time: int = defuse_json["round_time"]

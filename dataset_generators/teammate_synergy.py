@@ -53,12 +53,9 @@ class TeammateSynergyGenerator(DatasetGenerator):
                     del self.out_json[player_name][teammate_name][WINS]
                     del self.out_json[player_name][teammate_name][GAMES]
 
-            self.out_json[player_name] = {
-                k: v
-                for k, v in sorted(
-                    self.out_json[player_name].items(),
-                    key=lambda x: x[1][TEAMMATE_NAME],
-                )
-            }
+            self.out_json[player_name] = sorted(
+                self.out_json[player_name].values(),
+                key=lambda x: x[TEAMMATE_NAME],
+            )
 
         return self.out_json

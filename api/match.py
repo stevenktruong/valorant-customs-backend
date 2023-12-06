@@ -74,7 +74,7 @@ def remove_url():
 
     match_ids = []
     with open(MATCH_IDS_PATH, mode="r") as f:
-        urls = [line.rstrip() for line in f]
+        match_ids = [line.rstrip() for line in f]
 
     if match_id not in match_ids:
         return "Match already wasn't included on the dashboard", 404

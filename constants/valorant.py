@@ -1,4 +1,3 @@
-# Sides
 from enum import Enum
 
 
@@ -43,15 +42,9 @@ class Agent(Enum):
         obj.role_name = role_name
         return obj
 
-    def __init__(self, _, role_name: RoleName):
-        self.role_name = role_name
-
     def __lt__(self, other):
         if isinstance(other, Agent):
             return self.value < other.value
-
-    def __str__(self):
-        return self.value
 
     ASTRA = "Astra", RoleName.CONTROLLER
     BREACH = "Breach", RoleName.INITIATOR

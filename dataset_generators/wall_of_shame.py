@@ -81,7 +81,7 @@ class WallOfShameGenerator(DatasetGenerator):
                 giver_name = damage_event.giver_name
                 receiver_name = damage_event.receiver_name
 
-                if isinstance(giver_name, PlayerName):
+                if giver_name in PlayerName:
                     if (
                         match.players_in_same_team(giver_name, receiver_name)
                         and damage_event.damage < 800
@@ -114,7 +114,7 @@ class WallOfShameGenerator(DatasetGenerator):
                 if (
                     victim_name not in handled_players
                     and _round.player_stats[victim_name].side == Side.ATTACKERS
-                    and isinstance(victim_name, PlayerName)
+                    and victim_name in PlayerName
                 ):
                     handled_players.add(victim_name)
                     if _round.winning_side == Side.ATTACKERS:
@@ -127,13 +127,13 @@ class WallOfShameGenerator(DatasetGenerator):
                         ] += kill.round_time
 
                 if kill.weapon_name == "Melee":
-                    if isinstance(killer_name, PlayerName):
+                    if killer_name in PlayerName:
                         self.out_json[killer_name][KNIFE_KILLS] += 1
-                    if isinstance(victim_name, PlayerName):
+                    if victim_name in PlayerName:
                         self.out_json[victim_name][KNIFE_DEATHS] += 1
 
                 if kill.weapon_name == "Bomb":
-                    if isinstance(victim_name, PlayerName):
+                    if victim_name in PlayerName:
                         self.out_json[victim_name][BOMB_DEATHS] += 1
 
             for player_name in filter_players(match.all_players):

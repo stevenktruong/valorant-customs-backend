@@ -1,6 +1,6 @@
 import json
 import os
-from typing import TypeAlias
+from typing import Any, TypeAlias
 
 from Match import Match
 
@@ -8,6 +8,8 @@ JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | 
 
 
 class DatasetGenerator:
+    out_json: Any
+
     def __init__(self, name: str):
         self.name = name
         self.out_json = None

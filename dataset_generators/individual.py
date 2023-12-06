@@ -100,7 +100,7 @@ class IndividualGenerator(DatasetGenerator):
 
             # Convert key from Enum.Agent to a true string
             for agent in Agent:
-                self.out_json[player_name][AGENTS][agent.name] = self.out_json[
+                self.out_json[player_name][AGENTS][agent.value] = self.out_json[
                     player_name
                 ][AGENTS].pop(agent)
 
@@ -120,8 +120,8 @@ class IndividualGenerator(DatasetGenerator):
                 for map_name in MapName:
                     del self.out_json[player_name][MAPS][map_name][SCORE]
                     del self.out_json[player_name][MAPS][map_name][ROUNDS]
-                for agent_name in Agent:
-                    del self.out_json[player_name][AGENTS][agent_name.name][WINRATE]
-                    del self.out_json[player_name][AGENTS][agent_name.name][WINS]
+                for agent in Agent:
+                    del self.out_json[player_name][AGENTS][agent.value][WINRATE]
+                    del self.out_json[player_name][AGENTS][agent.value][WINS]
 
         return self.out_json
