@@ -1,0 +1,15 @@
+meta {
+  name: Remove match from tracker.gg URL
+  type: http
+  seq: 2
+}
+
+delete {
+  url: http://localhost:8000/match
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  url: https://tracker.gg/valorant/match/bc4ba775-9062-45cb-b30b-b163c5907134
+}
