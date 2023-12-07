@@ -9,7 +9,7 @@ from constants import *
 class Player:
     def __init__(self, player_json):
         self.player_name: str = player_json["player_name"]
-        self.agent: Agent = Agent(player_json["agent"])
+        self.agent: Agent = Agent(player_json["agent"])  # type: ignore
         self.average_combat_score: int = player_json["average_combat_score"]
         self.kills: int = player_json["kills"]
         self.deaths: int = player_json["deaths"]
@@ -182,22 +182,22 @@ class Match:
     def player_did_play(self, player_name):
         return player_name in self.all_players
 
-    def all_players_did_play(self, *PlayerName):
-        return all([self.player_did_play(player_name) for player_name in PlayerName])
+    def all_players_did_play(self, *player_list):
+        return all([self.player_did_play(player_name) for player_name in player_list])
 
     def player_did_win(self, player_name):
         return player_name in self.winning_players
 
-    def all_players_did_win(self, *PlayerName):
-        return all([self.player_did_win(player_name) for player_name in PlayerName])
+    def all_players_did_win(self, *player_list):
+        return all([self.player_did_win(player_name) for player_name in player_list])
 
     def player_did_lose(self, player_name):
         return player_name in self.losing_players
 
-    def all_players_did_lose(self, *PlayerName):
-        return all([self.player_did_lose(player_name) for player_name in PlayerName])
+    def all_players_did_lose(self, *player_list):
+        return all([self.player_did_lose(player_name) for player_name in player_list])
 
-    def players_in_same_team(self, *PlayerName):
-        return all([player_name in self.team_red for player_name in PlayerName]) or all(
-            [player_name in self.team_blue for player_name in PlayerName]
-        )
+    def players_in_same_team(self, *player_list):
+        return all(
+            [player_name in self.team_red for player_name in player_list]
+        ) or all([player_name in self.team_blue for player_name in player_list])

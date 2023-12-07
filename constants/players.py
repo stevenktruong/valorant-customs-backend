@@ -3,6 +3,9 @@ from enum import Enum
 
 
 class PlayerName(str, Enum):
+    def __str__(self):
+        return self.value
+
     BRANDON = "brandon"
     BREE = "bree"
     BRIAN = "brian"

@@ -2,16 +2,25 @@ from enum import Enum
 
 
 class Team(str, Enum):
+    def __str__(self):
+        return self.value
+
     RED = "red"
     BLUE = "blue"
 
 
 class Side(str, Enum):
+    def __str__(self):
+        return self.value
+
     ATTACKERS = "attackers"
     DEFENDERS = "defenders"
 
 
 class WinMethod(str, Enum):
+    def __str__(self):
+        return self.value
+
     SURRENDER = "surrender"
     ELIMINIATION = "elimination"
     DEFUSE = "defuse"
@@ -27,6 +36,9 @@ Y_SHIFT = "y_shift"
 
 
 class RoleName(str, Enum):
+    def __str__(self):
+        return self.value
+
     CONTROLLER = "Controller"
     DUELIST = "Duelist"
     INITIATOR = "Initiator"
@@ -45,6 +57,9 @@ class Agent(Enum):
     def __lt__(self, other):
         if isinstance(other, Agent):
             return self.value < other.value
+
+    def __str__(self):
+        return self.value
 
     ASTRA = "Astra", RoleName.CONTROLLER
     BREACH = "Breach", RoleName.INITIATOR
@@ -72,6 +87,9 @@ class Agent(Enum):
 
 
 class MapName(str, Enum):
+    def __str__(self):
+        return self.value
+
     ASCENT = "Ascent"
     BIND = "Bind"
     BREEZE = "Breeze"
