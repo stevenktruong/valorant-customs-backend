@@ -47,7 +47,7 @@ Each API endpoint is registered via `add_url_rule` in `app.py`.
 
 All data is derived from either [tracker.gg](https://tracker.gg/valorant) or the [unofficial VALORANT API](https://github.com/Henrik-3/unofficial-valorant-api). `samples` contain example JSON from these sources. Since bot detection has improved, scraping from tracker.gg is now deprecated, so data from there can no longer (reliably) be scraped. Consequently, previously scraped data needs to be manually acquired, and all future matches will be fetched via the unofficial API.
 
-Code for fetching and parsing from each data source can be found in `data_providers`.
+You will need to provide an API key for the unofficial API under `API_KEY` in a `.env` file. Code for fetching and parsing from each data source can be found in `data_providers`.
 
 `tracker-match-ids.txt` contains all the matches that were scraped from tracker.gg and will no longer be updated. `match-ids.txt` contains all matches fetched from the unofficial API and will be updated.
 

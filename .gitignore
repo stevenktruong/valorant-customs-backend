@@ -13,3 +13,6 @@ out-min
 test
 api-out.json
 tracker-out.json
+
+# Secrets
+.env

@@ -1,10 +1,12 @@
 from urllib import parse
 
 import requests
+from dotenv import dotenv_values
 
 from data_providers.DataProvider import DataProvider
 from data_providers.util import side, username_to_name
 
+API_KEY = dotenv_values()["API_KEY"]
 BASE_URL = "https://api.henrikdev.xyz/"
 
 
@@ -57,9 +59,15 @@ def round_duration(round_json):
 
 
 class ApiProvider(DataProvider):
+    def __init__(self):
+        self.api_key = API_KEY
+
     def fetch(self, match_id: str):
+        print(self.api_key)
         return requests.get(
-            parse.urljoin(BASE_URL, f"/valorant/v2/match/{match_id}")
+            parse.urljoin(
+                BASE_URL, f"/valorant/v2/match/{match_id}?api_key={self.api_key}"
+            ),
         ).json()["data"]
 
     def parse(self, match_json):
