@@ -106,11 +106,17 @@ class MapName(str, Enum):
 
 # Linear transformations are from https://valorant-api.com/v1/maps
 COORDINATE_TRANSFORMATIONS: dict[MapName, dict[str, float]] = {
-    MapName.ASCENT: {
+    MapName.ABYSS: {
         X_COEFFICIENT: 8.1e-05,
         Y_COEFFICIENT: -8.1e-05,
         X_SHIFT: 0.5,
         Y_SHIFT: 0.5,
+    },
+    MapName.ASCENT: {
+        X_COEFFICIENT: 7e-05,
+        Y_COEFFICIENT: -7e-05,
+        X_SHIFT: 0.813895,
+        Y_SHIFT: 0.573242,
     },
     MapName.SPLIT: {
         X_COEFFICIENT: 7.8e-05,
