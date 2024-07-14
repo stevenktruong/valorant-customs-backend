@@ -65,6 +65,7 @@ class Agent(Enum):
     BREACH = "Breach", RoleName.INITIATOR
     BRIMSTONE = "Brimstone", RoleName.CONTROLLER
     CHAMBER = "Chamber", RoleName.SENTINEL
+    CLOVE = "Clove", RoleName.CONTROLLER
     CYPHER = "Cypher", RoleName.SENTINEL
     DEADLOCK = "Deadlock", RoleName.SENTINEL
     FADE = "Fade", RoleName.INITIATOR
