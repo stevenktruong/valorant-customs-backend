@@ -63,7 +63,6 @@ class ApiProvider(DataProvider):
         self.api_key = API_KEY
 
     def fetch(self, match_id: str):
-        print(self.api_key)
         return requests.get(
             parse.urljoin(
                 BASE_URL, f"/valorant/v2/match/{match_id}?api_key={self.api_key}"
