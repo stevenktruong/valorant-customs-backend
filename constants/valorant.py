@@ -91,6 +91,7 @@ class MapName(str, Enum):
     def __str__(self):
         return self.value
 
+    ABYSS = "Abyss"
     ASCENT = "Ascent"
     BIND = "Bind"
     BREEZE = "Breeze"
@@ -106,10 +107,10 @@ class MapName(str, Enum):
 # Linear transformations are from https://valorant-api.com/v1/maps
 COORDINATE_TRANSFORMATIONS: dict[MapName, dict[str, float]] = {
     MapName.ASCENT: {
-        X_COEFFICIENT: 7e-05,
-        Y_COEFFICIENT: -7e-05,
-        X_SHIFT: 0.813895,
-        Y_SHIFT: 0.573242,
+        X_COEFFICIENT: 8.1e-05,
+        Y_COEFFICIENT: -8.1e-05,
+        X_SHIFT: 0.5,
+        Y_SHIFT: 0.5,
     },
     MapName.SPLIT: {
         X_COEFFICIENT: 7.8e-05,
