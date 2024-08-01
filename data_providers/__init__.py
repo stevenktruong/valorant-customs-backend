@@ -56,6 +56,7 @@ def fetch_all():
             try:
                 time.sleep(2.5)
                 match_json = api.fetch(match_id)
+                Match(api.parse(match_json))
                 new_matches.append(match_json)
 
                 print("Success")

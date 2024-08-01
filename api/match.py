@@ -12,6 +12,7 @@ from config import API_DATA_PATH, MATCH_IDS_PATH, OUT_MIN
 from data_providers import api, get_matches
 from generate_datasets import generate_datasets
 from locks import database_lock
+from Match import Match
 from util import is_valid_tracker_url
 
 logger = logging.getLogger("app")
@@ -92,6 +93,9 @@ def add_url_job(match_id: str):
 
         logger.info("Begin fetching")
         match_json = api.fetch(match_id)
+
+        logger.info("Validating JSON")
+        Match(api.parse(match_json))
 
         logger.info("Updating api-data.jsonl")
         with jsonlines.open(API_DATA_PATH, mode="a") as f:
