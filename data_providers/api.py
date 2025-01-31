@@ -2,6 +2,7 @@ from urllib import parse
 
 import requests
 from dotenv import dotenv_values
+from sys import exit
 
 from data_providers.DataProvider import DataProvider
 from data_providers.util import side, username_to_name
@@ -15,7 +16,7 @@ end_type_to_win_method = {
     "Bomb detonated": "detonate",
     "Bomb defused": "defuse",
     "Round timer expired": "time",
-    # surrendered?
+    "Surrendered": "surrender",
 }
 
 
@@ -52,6 +53,9 @@ def round_duration(round_json):
         case "time":
             return 100000 + post_round_duration  # 1:40 min
 
+        case "surrender":
+            return 0
+
         case _:
             raise ValueError(
                 f"Unhandled end type: {end_type_to_win_method[round_json['end_type']]}"
@@ -63,11 +67,16 @@ class ApiProvider(DataProvider):
         self.api_key = API_KEY
 
     def fetch(self, match_id: str):
-        return requests.get(
+        fetched_json = requests.get(
             parse.urljoin(
                 BASE_URL, f"/valorant/v2/match/{match_id}?api_key={self.api_key}"
             ),
-        ).json()["data"]
+        ).json()
+        try:
+            return fetched_json["data"]
+        except:
+            print(fetched_json)
+            exit(1)
 
     def parse(self, match_json):
         all_player_names = [
@@ -120,6 +129,9 @@ class ApiProvider(DataProvider):
                 "damage_events": [],
                 "kills": [],
             }
+
+            if round_data["win_method"] == "surrender":
+                continue
 
             if round_json["bomb_planted"]:
                 planter_name = username_to_name(

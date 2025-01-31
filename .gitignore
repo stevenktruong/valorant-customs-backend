@@ -16,3 +16,6 @@ tracker-out.json
 
 # Secrets
 .env
+
+# Miscellaneous
+double-sentinel

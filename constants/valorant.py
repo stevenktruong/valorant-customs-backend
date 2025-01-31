@@ -83,7 +83,9 @@ class Agent(Enum):
     SAGE = "Sage", RoleName.SENTINEL
     SKYE = "Skye", RoleName.INITIATOR
     SOVA = "Sova", RoleName.INITIATOR
+    TEJO = "Tejo", RoleName.INITIATOR
     VIPER = "Viper", RoleName.CONTROLLER
+    VYSE = "Vyse", RoleName.SENTINEL
     YORU = "Yoru", RoleName.DUELIST
 
 
